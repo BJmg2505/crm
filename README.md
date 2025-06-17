@@ -16,6 +16,7 @@ Pero si no quiere seguir ninguna de nuestras opciones, asegúrate de tener insta
 
 ## Pasos de Instalación
 
+
 **Clonar el Repositorio:**
 
 ```bash
@@ -28,6 +29,20 @@ Habilitar en `php.ini`
 ```bash
 extension=gd
 extension=zip
+```
+
+**Copiar el Archivo de cpanel:**
+ahi cambiar el nombre del servidor `nameserver`
+
+```bash
+cp .cpanel.example.yml .cpanel.yml
+```
+
+**Copiar el Archivo de deploy/index.cpanel:**
+ahi cambiar el nombre del servidor `nameserver`
+
+```bash
+cp ./deploy/index.cpanel.example.php ./deploy/index.cpanel.php
 ```
 
 **Instalar Dependencias de PHP:**

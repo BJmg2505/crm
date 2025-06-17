@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /vendor
+/deploy/index.cpanel.php
 .cpanel.yml
 .env
 .env.backup
