@@ -2,8 +2,6 @@
 
 Este documento proporciona instrucciones detalladas sobre cómo instalar y levantar un proyecto Laravel en tu entorno local.
 
-> Documento para la implementacion y migración de datos [DOCUMENTS](./DOCUMENTS.md)
-
 ## Requisitos Previos
 
 > Recomendamos usar [Herd](https://herd.laravel.com/windows), proporcionado por Laravel. Si no cuenta con la versión pro, puede descargar un gestor de Base de Datos de su preferencia. Por sugerencia puede usar `HeidiSQL`.
