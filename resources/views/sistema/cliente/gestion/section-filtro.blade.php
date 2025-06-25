@@ -3,10 +3,6 @@
     <div class="w-full flex flex-col py-2 gap-4">
         <div id="contenedor_filtro_etapas" class="etapa-grid-container">
             <div class="etapa-grid">
-                <!-- Botón General -->
-                <x-sistema.boton type="first" :title="'GENERAL'" :count="$count_total" color="#f16731" :active="request('filtro_etapa_id') == 0"
-                    onclick="selectFiltroEtapa()" />
-
                 @foreach ($data_etapas as $etapaId => $etapaData)
                     <x-sistema.boton :type="$loop->last ? 'last' : 'middle'"
                         :title="$etapaData['nombre']"

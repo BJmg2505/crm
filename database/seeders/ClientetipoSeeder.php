@@ -13,15 +13,16 @@ class ClientetipoSeeder extends Seeder
     public function run(): void
     {
         Clientetipo::factory()->create([
-            'nombre' => 'NCP',
+            'nombre' => 'WIN Empresas - Activo',
         ]);
-
         Clientetipo::factory()->create([
-            'nombre' => 'NAT',
+            'nombre' => 'WIN Empresas - Potencial',
         ]);
-
         Clientetipo::factory()->create([
-            'nombre' => 'VACANTE',
+            'nombre' => 'WIN Negocios',
+        ]);
+        Clientetipo::factory()->create([
+            'nombre' => 'Libre',
         ]);
     }
 }

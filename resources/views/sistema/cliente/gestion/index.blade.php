@@ -7,6 +7,10 @@
                 <div class="d-flex flex-column flex-md-row justify-content-between"> <!-- Cambia a columna en móvil -->
                     <div class="mb-2 mb-md-0"> <!-- Margen inferior solo en móvil -->
                         <x-sistema.titulo title="Gestión de Clientes" />
+                        <x-ui.count-rectangle onclick="selectFiltroEtapa()" class="cursor-pointer">
+                            <x-slot:toggle>General</x-slot>
+                            {{ $count_total }}
+                        </x-ui.count-rectangle>
                     </div>
                     <div>
                         @can('sistema.gestion_cliente.agregar')
