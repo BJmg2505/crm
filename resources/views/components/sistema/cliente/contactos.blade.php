@@ -21,7 +21,13 @@
                     </div>
                     <div class="form-group">
                         <label for="cargo" class="form-control-label">Cargo:</label>
-                        <input class="form-control" type="text" id="cargo" name="cargo">
+                        <select class="form-control" id="cargo" name="cargo">
+                            <option value="Gerente General">Gerente General</option>
+                            <option value="Apoderado">Apoderado</option>
+                            <option value="Administrador (a)">Administrador (a)</option>
+                            <option value="Empleado (a)">Empleado (a)</option>
+                        </select>
+                        {{-- <input class="form-control" type="text" id="cargo" name="cargo"> --}}
                     </div>
                     <div class="form-group">
                         <label for="celular" class="form-control-label">Celular:</label>

@@ -29,9 +29,7 @@
                 </th>
                 <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Fecha de
                     última Gestión</th>
-                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Total Líneas
-                    <br> en la Competencia
-                </th>
+                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Tipo de Cliente</th>
                 <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Días sin
                     Gestión</th>
 
