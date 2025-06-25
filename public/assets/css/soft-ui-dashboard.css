@@ -51,7 +51,7 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #67748e;
+  color: #e95f0f;
   background-color: #fff;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -74,7 +74,7 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   margin-bottom: 0.5rem;
   font-weight: 400;
   line-height: 1.2;
-  color: #344767;
+  color: #e95f0f;
 }
 
 h1, .h1 {
@@ -2585,7 +2585,7 @@ progress {
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.4rem;
-  color: #495057;
+  color: #ff8843;
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #d2d6da;
@@ -2607,7 +2607,7 @@ progress {
   cursor: pointer;
 }
 .form-control:focus {
-  color: #495057;
+  color: ##ff8843;
   background-color: #fff;
   border-color: #e293d3;
   outline: 0;
@@ -2632,7 +2632,7 @@ progress {
   padding: 0.5rem 0.75rem;
   margin: -0.5rem -0.75rem;
   margin-inline-end: 0.75rem;
-  color: #495057;
+  color: #ff8843;
   background-color: #fff;
   pointer-events: none;
   border-color: inherit;
@@ -2654,7 +2654,7 @@ progress {
   padding: 0.5rem 0.75rem;
   margin: -0.5rem -0.75rem;
   margin-inline-end: 0.75rem;
-  color: #495057;
+  color: #ff8843;
   background-color: #fff;
   pointer-events: none;
   border-color: inherit;
@@ -2681,7 +2681,7 @@ progress {
   padding: 0.5rem 0;
   margin-bottom: 0;
   line-height: 1.4rem;
-  color: #344767;
+  color: #ff8843;
   background-color: transparent;
   border: solid transparent;
   border-width: 1px 0;
@@ -2760,7 +2760,7 @@ textarea.form-control-lg {
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.4rem;
-  color: #495057;
+  color: #ff8843;
   background-color: #fff;
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
@@ -2788,7 +2788,7 @@ textarea.form-control-lg {
   background-image: none;
 }
 .form-select:disabled {
-  color: #6c757d;
+  color: #ff8843;
   background-color: #e9ecef;
 }
 .form-select:-moz-focusring {
@@ -8912,7 +8912,7 @@ textarea.form-control-lg {
 }
 
 .text-secondary {
-  color: #8392AB !important;
+  color: #FFA500 !important;
 }
 
 .text-success {
@@ -19195,7 +19195,7 @@ svg.text-primary .color-background {
 }
 
 svg.text-secondary .color-foreground {
-  fill: #627594;
+  fill: #FFA500;
 }
 svg.text-secondary .color-background {
   fill: #A8B8D8;
@@ -19661,7 +19661,7 @@ hr.horizontal.gray-light {
   padding-left: 1rem;
   padding-right: 1rem;
   font-weight: 500;
-  color: #67748e;
+  color: #EB5C1F;
 }
 .navbar-vertical .navbar-nav .nav-link > i {
   min-width: 1.8rem;

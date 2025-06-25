@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="p-4">
-            <div class=" bg-slate-900 bg-opacity-5 p-4 rounded-md" id="dialog">
+            <div class=" bg-slate-400 bg-opacity-5 p-4 rounded-md" id="dialog">
                 <div class="form-group">
                     <label for="name" class="form-control-label">Nombre:</label>
                     <input class="form-control" type="text" value="{{ auth()->user()->name }}" id="name" name="name" disabled>

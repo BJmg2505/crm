@@ -147,11 +147,11 @@ class Nav extends Component
         // Determinar el saludo según la hora del día
         $hora = now()->format('H');
         if ($hora < 12) {
-            $saludo = '¡Buenos días, ' . $user->name . '! Bienvenido/a al Indolead';
+            $saludo = '¡Buenos días, ' . $user->name . '! Bienvenido/a al Win360';
         } elseif ($hora < 18) {
-            $saludo = '¡Buenas tardes, ' . $user->name . '! Bienvenido/a al Indolead';
+            $saludo = '¡Buenas tardes, ' . $user->name . '! Bienvenido/a al Win360';
         } else {
-            $saludo = '¡Buenas noches, ' . $user->name . '! Bienvenido/a al Indolead';
+            $saludo = '¡Buenas noches, ' . $user->name . '! Bienvenido/a al Win360';
         }
 
         return view('livewire.nav', compact(

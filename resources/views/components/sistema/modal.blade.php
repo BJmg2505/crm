@@ -11,7 +11,7 @@
             <i class="fa-solid fa-rectangle-xmark"></i>
         </button>
     </div>
-    <div class="bg-gray-100 rounded-lg p-2">
+    <div class="bg-gray-300 rounded-lg p-2">
         {{ $slot }}
     </div>
 </dialog>

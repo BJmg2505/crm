@@ -13,7 +13,7 @@
 </section>
 <script>
     $(document).ready(function(){
-        $('.ui-table th').addClass('text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7');
+        $('.ui-table th').addClass('text-center text-uppercase text-warning text-xxs font-weight-bolder opacity-7');
         $('.ui-table td').addClass('align-middle text-center text-xs uppercase');
 
         // Agregar clase hover a las filas
