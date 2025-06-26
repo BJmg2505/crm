@@ -1,1 +1,1 @@
-<label {{ $attributes->merge(['class' => 'form-control-label']) }}>{{ $slot }}</label>
+<label {{ $attributes->merge(['class' => 'form-control-label']) }} style="color: #FFA500;">{{ $slot }}</label>
