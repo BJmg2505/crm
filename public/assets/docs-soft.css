@@ -9,7 +9,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  background-image: linear-gradient(310deg,#141727,#3a416f) !important;
+  background-image: linear-gradient(310deg,#141727,#ec3507) !important;
   padding-top: 0.1rem !important;
   padding-bottom: 0.1rem !important;
   box-shadow: rgba(116, 129, 141, .1) 0 1px 1px 0;
@@ -90,7 +90,7 @@
   font-weight: 600;
   letter-spacing: 0.05px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, .65);
+  color: rgba(90, 90, 90, 0.65);
 }
 
 @media (min-width: 768px) {
@@ -217,7 +217,7 @@
   width: 100%;
   text-align: inherit;
   white-space: nowrap;
-  color: #212529;
+  color: #EB5C1F;
   border: 0;
   background-color: transparent;
   text-decoration: none;
@@ -269,7 +269,7 @@
   color: #fff;
   text-transform: uppercase;
   will-change: transform;
-  background-image: linear-gradient(310deg,#7928ca,#ff0080);
+  background-image: linear-gradient(310deg,#28ca59,#ff0080);
   box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
   font-weight: 700;
   line-height: 1.5;
@@ -510,8 +510,8 @@
   padding-left: 15px;
   max-width: 100%;
   flex: 0 0 100%;
-  border-bottom: 1px solid #e6ecf1;
-  background-color: #fff;
+  border-bottom: 1px solid #969696;
+  background-color: #505353;
   order: 0;
 }
 

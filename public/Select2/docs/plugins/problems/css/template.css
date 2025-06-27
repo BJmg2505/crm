@@ -18,7 +18,7 @@ html, body {
 
 body {
   background: white;
-  color: #444444;
+  color: #ff8838;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
 
@@ -75,10 +75,10 @@ b, strong, label, th {
     background-color: rgba(255, 255, 255, 0.9) !important;
     box-shadow: 0 0.05rem 1rem rgba(0, 0, 0, 0.15) !important; }
     #header.scrolled #logo h3 {
-      color: #444444 !important;
+      color: #ff8838 !important;
       font-size: 1.6rem !important; }
     #header.scrolled #logo a {
-      color: #444444 !important; }
+      color: #ff8838 !important; }
     #header.scrolled #navbar a {
       color: #1bb3e9 !important; }
     #header.scrolled #navbar a:before, #header.scrolled #navbar a:after {
@@ -93,7 +93,7 @@ b, strong, label, th {
       margin: 0;
       text-transform: uppercase; }
       #header #logo h3 a {
-        color: #444444; }
+        color: #ff8838; }
   #header #navbar {
     font-size: 0.9rem; }
     #header #navbar ul {
@@ -475,9 +475,9 @@ td {
       #panel .navigation li.active {
         background: #fff; }
         #panel .navigation li.active a {
-          color: #444444; }
+          color: #ff8838; }
           #panel .navigation li.active a:hover {
-            color: #444444; }
+            color: #ff8838; }
       #panel .navigation li:last-child {
         border-bottom: 0; }
       #panel .navigation li a:hover {
@@ -570,7 +570,7 @@ td {
     .list-item .list-blog-header h4 {
       margin-bottom: 0.5rem; }
       .list-item .list-blog-header h4 a {
-        color: #444444; }
+        color: #ff8838; }
         .list-item .list-blog-header h4 a:hover {
           color: #1bb3e9; }
     .list-item .list-blog-header img {

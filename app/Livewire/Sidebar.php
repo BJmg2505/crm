@@ -10,13 +10,13 @@ class Sidebar extends Component
     {
         $links = [
             [
-                'icon' => 'fa-house',
+                'icon' => 'fa-solid fa-chart-line',
                 'nombre' => 'Dashboard',
                 'url' => 'dashboard',
                 'can' => 'sistema.dashboard',
             ],
             [
-                'icon' => 'fa-user-magnifying-glass',
+                'icon' => 'fa-regular fa-magnifying-glass',
                 'nombre' => 'Consultor Clientes',
                 'url' => 'cliente-consultor',
                 'can' => 'sistema.cliente',
@@ -28,13 +28,13 @@ class Sidebar extends Component
                 'can' => 'sistema.funnel',
             ],
             [
-                'icon' => 'fa-users-medical',
+                'icon' => 'fa-solid fa-table-list',
                 'nombre' => 'Gestión Clientes',
                 'url' => 'cliente-gestion',
                 'can' => 'sistema.gestion_cliente',
             ],
             [
-                'icon' => 'fa-calendar',
+                'icon' => 'fa-regular fa-calendar-days',
                 'nombre' => 'Agenda',
                 'url' => 'notificacion',
                 'can' => 'sistema.notificacion',

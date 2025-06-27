@@ -36,7 +36,7 @@
         height: 85%;
         border: none;
         background: var(--bg-color);
-        color: #1e293b;
+        color: ##EB5C1F;
         font-weight: 700;
         position: relative;
         padding: 0 5px;

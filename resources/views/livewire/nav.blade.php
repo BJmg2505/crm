@@ -3,15 +3,15 @@
         <nav class="flex justify-between items-center">
             <!-- Mensaje de bienvenida y frase motivadora -->
             <div>
-                <h4 class="font-bold text-1xl text-blue-900 mb-2">{{ $saludo }}</h4>
-                <h4 class="text-xl text-gray-400 " id="frase-motivadora">{{ $fraseAleatoria }}</h4>
+                <h4 class="font-bold text-1xl text-[#EB5C1F] mb-2">{{ $saludo }}</h4>
+                <h4 class="text-xl text-[#ec936c] " id="frase-motivadora">{{ $fraseAleatoria }}</h4>
             </div>
 
             <!-- Botones de notificaciones y perfil -->
             <div class="flex items-center space-x-4">
                 <!-- Botón de notificaciones -->
                 <x-ui.button type="button"
-                    class="text-xs bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+                    class="text-xs bg-[#EB5C1F] text-white px-3 py-2 rounded-lg hover:bg-[#ec936c] transition duration-300"
                     onclick="cargarNotificacion('pendiente')">
                     {{ count(Helpers::NotificacionRecordatorio($user)) }} <i class="fa-solid fa-bell"></i>
                 </x-ui.button>
@@ -20,7 +20,7 @@
                 <div class="relative ml-3" x-data="{ open: false }">
                     <div class="w-[2.4rem]">
                         <button x-on:click="open = true" type="button"
-                            class="flex max-w-xs items-center rounded-full bg-blue-950 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-950"
+                            class="flex max-w-xs items-center rounded-full bg-[#EB5C1F] text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#EB5C1F]"
                             id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                             <img class="h-100 w-100 rounded-full" src="{{ $user->profile_photo_url }}"
                                 alt="">
@@ -28,18 +28,18 @@
                     </div>
 
                     <div x-show="open" x-on:click.away="open=false"
-                        class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                        class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-[#ec936c] ring-opacity-5 focus:outline-none"
                         role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                         <a href="{{ route('profile.show') }}"
-                            class="block text-blue-950 hover:text-blue-400 rounded-md px-3 py-2 text-sm font-medium"
+                            class="block text-[#EB5C1F] hover:text-[#ec936c] rounded-md px-3 py-2 text-sm font-medium"
                             role="menuitem" tabindex="-1" id="user-menu-item-0">Perfil</a>
                         <a href="{{ url('cliente-gestion') }}"
-                            class="block text-blue-950 hover:text-blue-400 rounded-md px-3 py-2 text-sm font-medium"
+                            class="block text-[#EB5C1F] hover:text-[#ec936c] rounded-md px-3 py-2 text-sm font-medium"
                             role="menuitem" tabindex="-1" id="user-menu-item-1">Gestión de Clientes</a>
                         <form method="POST" action="{{ route('logout') }}" x-data>
                             @csrf
                             <a href="{{ route('logout') }}"
-                                class="block text-blue-950 hover:text-blue-400 rounded-md px-3 py-2 text-sm font-medium"
+                                class="block text-[#EB5C1F] hover:text-[#ec936c] rounded-md px-3 py-2 text-sm font-medium"
                                 role="menuitem" tabindex="-1" id="user-menu-item-2"
                                 @click.prevent="$root.submit();">Salir</a>
                         </form>

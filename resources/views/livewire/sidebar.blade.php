@@ -1,21 +1,25 @@
-<aside class="h-screen">
-    <div class="bg-white min-h-full rounded">
-        <div class="w-auto px-3">
-            <ul class="p-0 m-0">
-                @if (is_array($links) || is_object($links))
-                    @foreach ($links as $link)
-                        @can($link['can'])
-                            <li class="py-3 text-xl">
-                                <span class="" data-bs-toggle="tooltip" data-bs-original-title="{{ $link['nombre'] }}">
-                                    <a href="{{ url($link['url']) }}" class="cursor-pointer">
-                                        <i class="fa-solid {{ $link['icon'] }}"></i>
-                                    </a>
-                                </span>
-                            </li>
-                        @endcan
-                    @endforeach
-                @endif
-            </ul>
-        </div>
+<aside class="h-screen"> <!-- Ancho reducido -->
+    <!-- Fondo ultra minimalista con sutil acento naranja -->
+    <div class="bg-white/25 backdrop-blur-md min-h-full p-1 border-r border-[#EB5C1F]/10">
+        <ul class="p-0 m-0 flex flex-col items-center space-y-6"> <!-- Centrado vertical -->
+            @if (is_array($links) || is_object($links))
+                @foreach ($links as $link)
+                    @can($link['can'])
+                        <li class="group w-full flex justify-center">
+                            <a 
+                                href="{{ url($link['url']) }}" 
+                                class="cursor-pointer p-2 rounded-full transition-all duration-200 hover:bg-[#EB5C1F]/25"
+                                data-bs-toggle="tooltip" 
+                                data-bs-placement="right"
+                                data-bs-original-title="{{ $link['nombre'] }}"
+                            >
+                                <!-- Icono naranja puro con hover sutil -->
+                                <i class="fa-solid {{ $link['icon'] }} text-2xl text-[#EB5C1F] group-hover:scale-110 transition-transform duration-200"></i>
+                            </a>
+                        </li>
+                    @endcan
+                @endforeach
+            @endif
+        </ul>
     </div>
 </aside>
