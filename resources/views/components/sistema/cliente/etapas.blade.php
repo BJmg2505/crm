@@ -10,19 +10,11 @@
         </div>
     </div>
     <div class="form-group">
-        <select class="form-control" id="etapa_id">
-            <option></option>
+        <select class="form-control" id="etapa_id" disabled>
             @foreach ($etapas as $value)
                 <option value="{{ $value->id }}">{{ $value->nombre }}</option>
             @endforeach
         </select>
-        {{-- <div class="flex flex-col items-center">
-            @php $width = 100; @endphp
-            @foreach ($etapas as $value)
-                @php $width -= 5; @endphp
-                <div class="p-2 rounded text-center font-medium" style="background-color: {{ $value->opacity }}; width: {{ $width }}%;" id="{{ $value->id }}">{{ $value->nombre }}</div>
-            @endforeach
-        </div> --}}
     </div>
     {{ $botonFooter }}
 </x-sistema.card>

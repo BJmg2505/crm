@@ -147,6 +147,7 @@
             method: "PUT",
             data: {
                 view: 'update-contacto',
+                contacto_id: $('#contacto_id').val(),
                 dni: $('#dni').val(),
                 nombre: $('#nombre').val(),
                 celular: $('#celular').val(),
@@ -154,6 +155,7 @@
                 correo: $('#correo').val(),
             },
             success: function(result) {
+                $('#contacto_id').val('');
                 $('#nombre').val('');
                 $('#dni').val('');
                 $('#celular').val('');
@@ -185,6 +187,19 @@
                         </td>
                         <td class="align-middle text-uppercase text-sm">
                             <span class="text-secondary text-xs font-weight-normal">${contacto.correo}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <button class="btn btn-sm btn-primary" type="button"
+                                @click="editarContacto({ 
+                                    contacto_id: '${contacto.id}', 
+                                    dni: '${contacto.dni}', 
+                                    nombre: '${contacto.nombre}', 
+                                    celular: '${contacto.celular}', 
+                                    cargo: '${contacto.cargo}', 
+                                    correo: '${contacto.correo}' 
+                                })">
+                                Editar
+                            </button>
                         </td>
                     </tr>`;
         })

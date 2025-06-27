@@ -453,7 +453,11 @@ class ClienteGestionController extends Controller
                     'cargo.required' => 'El "Cargo" es obligatorio.',
                 ]
             );
-            $contacto = new Contacto;
+            if (request('contacto_id') != '') {
+                $contacto = Contacto::find(request('contacto_id'));
+            } else {
+                $contacto = new Contacto;
+            }
             $contacto->dni = request('dni');
             $contacto->nombre = request('nombre');
             $contacto->celular = request('celular');
