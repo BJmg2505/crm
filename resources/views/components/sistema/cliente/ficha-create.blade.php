@@ -1,56 +1,113 @@
 @props([
     'onclickCloseModal' => 'closeModal()',
 ])
-<x-sistema.modal title="Agregar Cliente" dialog_id="dialog">
-    <div class="row p-1">
-        <div class="col-10 p-0">
-            <div class="row p-0 m-2">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-6 p-0">
-                            <x-sistema.cliente.datos></x-sistema.cliente.datos>
-                            <x-sistema.cliente.contactos></x-sistema.cliente.contactos>
-                            <x-sistema.cliente.sucursales />
-                        </div>
-                        <div class="col-6 p-0">
-                            <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
-                        </div>
-                    </div>
+<x-sistema.modal title="Agregar Cliente" dialog_id="dialog" :$onclickCloseModal style="width: 70vw;">
+    <div class="row bg-gray-200">
+        {{-- COLUMNA PRINCIPAL: 8 columnas --}}
+        <div class="m-0 p-1 col-md-8">
+            {{-- DATOS DEL CLIENTE --}}
+            <div class="mb-1">
+                <x-sistema.cliente.datos />
+            </div>
+
+            {{-- DATOS ADICIONALES --}}
+            <div class="p-2 mb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <x-sistema.titulo title="Datos Adicionales" />
+                    <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-movistar', this)">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
                 </div>
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-10">
-                            <x-sistema.cliente.comentarios></x-sistema.cliente.comentarios>
-                        </div>
-                        <div class="col-2">
-                            <x-sistema.cliente.etapas></x-sistema.cliente.etapas>
-                        </div>
-                    </div>
+                <div id="panel-movistar" style="display: block;">
+                    <x-sistema.cliente.movistars />
+                </div>
+            </div>
+
+            {{-- PRODUCTOS EN NEGOCIACIÓN --}}
+            <div class="p-2 mb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <x-sistema.titulo title="Productos en Negociación" />
+                    <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-ventas', this)">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div id="panel-ventas" style="display: none;">
+                    <x-sistema.cliente.ventas />
+                </div>
+            </div>
+
+            {{-- CONTACTOS --}}
+            <div class="p-2 mb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <x-sistema.titulo title="Contactos" />
+                    <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-contactos', this)">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div id="panel-contactos" style="display: none;">
+                    <x-sistema.cliente.contactos />
+                </div>
+            </div>
+
+            {{-- SUCURSALES --}}
+            <div class="p-2 mb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <x-sistema.titulo title="Sucursales" />
+                    <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-sucursales', this)">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div id="panel-sucursales" style="display: none;">
+                    <x-sistema.cliente.sucursales />
                 </div>
             </div>
         </div>
-        <div class="col-2 p-0">
-            <x-sistema.cliente.movistars></x-sistema.cliente.movistars>
+
+        {{-- COLUMNA LATERAL: 4 columnas --}}
+        <div class="m-0 p-1 col-md-4">
+            {{-- ETAPA --}}
+            <div class="p-0 mb-1">
+                <x-sistema.cliente.etapas />
+            </div>
+
+            {{-- COMENTARIOS --}}
+            <div class="p-0 mb-1">
+                <x-sistema.cliente.comentarios />
+            </div>
         </div>
     </div>
-    <div class="flex justify-end mt-2 gap-2">
+
+    {{-- BOTÓN --}}
+    <div class="text-end mt-3" style="background: gray-100;">
         <x-ui.button class="bg-slate-700" type="button" onclick="{{ $onclickCloseModal }}">Cancelar</x-ui.button>
         <x-ui.button type="button" onclick="submitCliente(this)">Agregar</x-ui.button>
     </div>
 </x-sistema.modal>
+
 <script>
+    function toggleSeccion(id, button) {
+        const panel = document.getElementById(id);
+        const icon = button.querySelector('i');
+        if (!panel || !icon) return;
+
+        const isVisible = panel.style.display === 'block';
+        panel.style.display = isVisible ? 'none' : 'block';
+        icon.classList.toggle('fa-chevron-down', isVisible);
+        icon.classList.toggle('fa-chevron-up', !isVisible);
+    }
+
     function submitCliente(button) {
         limpiarError();
         capturarToken();
         let dataCargo = [];
-        $.each($('#producto_table tbody tr'), function (index, tr) {
+        $.each($('#producto_table tbody tr'), function(index, tr) {
             dataCargo.push({
-                producto_id: $('#producto_id'+tr.id).val(),
-                producto_nombre: $('#producto_nombre'+tr.id).val(),
-                detalle: $('#detalle'+tr.id).val(),
-                cantidad: $('#cantidad'+tr.id).val(),
-                precio: $('#precio'+tr.id).val(),
-                total: $('#cargofijo'+tr.id).val(),
+                producto_id: $('#producto_id' + tr.id).val(),
+                producto_nombre: $('#producto_nombre' + tr.id).val(),
+                detalle: $('#detalle' + tr.id).val(),
+                cantidad: $('#cantidad' + tr.id).val(),
+                precio: $('#precio' + tr.id).val(),
+                total: $('#cargofijo' + tr.id).val(),
             });
         });
         $.ajax({
@@ -98,18 +155,18 @@
             beforeSend: function() {
                 button.disabled = true;
             },
-            success: function (response) {
+            success: function(response) {
                 if (response.redirect) {
                     location.reload();
                 } else {
                     alert('Posiblemente ya ha registrado el cliente, actualizar la página');
                 }
             },
-            error: function (response) {
+            error: function(response) {
                 mostrarError(response)
                 button.disabled = false;
             }
         });
-        
+
     }
 </script>

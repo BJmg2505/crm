@@ -1,30 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App\Http\Controllers;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Contacto;
+use Illuminate\Http\Request;
 
-class Contacto extends Model
+class ContactoController extends Controller
 {
-    use HasFactory;
-
-    // ← Campos que se pueden guardar con create()
-    protected $fillable = [
-        'cliente_id',
-        'dni',
-        'nombre',
-        'celular',
-        'cargo',
-        'correo'
-    ];
-
-    // Relación uno a muchos inversa
-    public function cliente()
-    {
-        return $this->belongsTo(Cliente::class);
-    }
-
     public function store(Request $request)
     {
         $validated = $request->validate([

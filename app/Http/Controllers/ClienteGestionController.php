@@ -727,6 +727,7 @@ class ClienteGestionController extends Controller
             }
         }
     }
+    
 
     /**
      * Remove the specified resource from storage.

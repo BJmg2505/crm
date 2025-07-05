@@ -3,60 +3,54 @@
     'botonFooter' => '',
     'comentarios' => false,
 ])
-<x-sistema.card class="m-2">
+
+<x-sistema.card class="p-4 m-2 mx-0">
     <!-- Encabezado -->
-    <div class="d-flex flex-row flex-wrap justify-content-between">
-        <x-sistema.titulo title="Comentarios *" />
-        <div class="flex flex-row gap-2">
+    <div class="d-flex flex-wrap justify-between align-items-center mb-3">
+        <x-sistema.titulo title="Comentarios" />
+        <div class="d-flex gap-2">
             {{ $botonHeader }}
         </div>
     </div>
 
-    <!-- Área de texto para nuevos comentarios (solo para ejecutivos) -->
+    <!-- Área para nuevo comentario -->
     @role('ejecutivo')
-    <div class="form-group mb-4">
-        <textarea class="form-control" rows="3" id="comentario" name="comentario" placeholder="Escribe tu comentario..."></textarea>
-    </div>
+        <div class="mb-3">
+            <textarea class="form-control form-control-sm" id="comentario" name="comentario" rows="2"
+                placeholder="Escribe tu comentario..."></textarea>
+        </div>
     @endrole
 
-    <!-- Botón de pie de página -->
-    {{ $botonFooter }}
+    <!-- Botón pie -->
+    <div class="text-end mb-3">
+        {{ $botonFooter }}
+    </div>
 
-    <!-- Lista de comentarios -->
-    <div class="flex-auto" id="comentarios">
-        @if ($comentarios)
+    <!-- Lista de Comentarios -->
+    <div id="comentarios">
+        @if ($comentarios && count($comentarios))
             @foreach ($comentarios as $comentario)
-                <div class="mb-4 p-4 bg-white rounded-lg shadow-sm">
-                    <!-- Contenido del comentario -->
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-base font-semibold text-slate-900">{{ $comentario['comentario'] }}</span>
+                <div class="border rounded px-3 py-2 mb-2 bg-white shadow-sm">
+                    <!-- Texto del comentario con ícono -->
+                    <div class="mb-1 text-m text-orange-600 fw-semibold d-flex align-items-start">
+                        <i class="fa-solid fa-comment text-orange-400 me-2 mt-1"></i>
+                        <span>{{ $comentario['comentario'] }}</span>
                     </div>
 
-                    <!-- Detalles del comentario -->
-                    <div class="flex flex-wrap justify-end gap-2 text-sm">
-                        <!-- Usuario -->
-                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-lg">
-                            <i class="text-blue-400 fa-solid fa-user"></i> {{ $comentario['usuario'] }}
-                        </span>
-
-                        <!-- Etiqueta -->
-                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-lg">
-                            <i class="text-green-400 fa-solid fa-tag"></i> {{ $comentario['etiqueta'] }}
-                        </span>
-
-                        <!-- Detalle adicional -->
-                        <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded-lg">
-                            <i class="text-purple-400 fa-solid fa-info-circle"></i> {{ $comentario['detalle'] }}
-                        </span>
-                        <!-- Detalle fecha -->
-                        <span class="px-2 py-1 text-slate-600">
-                            <i class="text-blue-400 fa-solid fa-calendar-days"></i> {{ $comentario['fecha'] }}
-                        </span>
+                    <!-- Detalles compactos -->
+                    <div class="text-xs text-muted d-flex flex-wrap gap-3 justify-end">
+                        <span><i class="fa-solid fa-user me-1"></i>{{ $comentario['usuario'] }}</span>
+                        <span><i class="fa-solid fa-tag me-1"></i>{{ $comentario['etiqueta'] }}</span>
+                        <span><i class="fa-solid fa-info-circle me-1"></i>{{ $comentario['detalle'] }}</span>
+                        <span><i class="fa-solid fa-calendar-days me-1"></i>{{ $comentario['fecha'] }}</span>
                     </div>
                 </div>
             @endforeach
         @else
-            <p class="text-gray-500 text-center py-4">No hay comentarios para mostrar.</p>
+            <div class="text-center text-gray-500 py-3 text-sm">
+                <i class="fa-regular fa-comment-slash me-1"></i> No hay comentarios para mostrar.
+            </div>
         @endif
+
     </div>
 </x-sistema.card>

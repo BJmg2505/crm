@@ -96,8 +96,12 @@
                         <span
                             class="text-secondary text-xs font-weight-normal">{{ date('d/m/Y H:i:s A', strtotime($value->fecha_gestion)) }}</span>
                     </td>
-                    <td class="align-middle text-center text-sm">
-                        {{ $total_lineas }}
+                    <td class="align-middle text-center">
+                        <span class="text-xs font-weight-bold mb-0 uppercase"><span
+                                class="text-xs font-weight-bold mb-0 uppercase">
+                                {{ optional($value->movistars->last()?->clientetipo)->nombre ?? '-' }}
+                            </span>
+                        </span>
                     </td>
                     <td class="align-middle text-center text-sm">
                         @if ($dias >= 60)

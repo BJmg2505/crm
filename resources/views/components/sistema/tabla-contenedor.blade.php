@@ -1,4 +1,4 @@
-<div class="bg-gray-400 rounded-2xl drop-shadow-xl p-0">
+<div class="bg-white rounded-2xl drop-shadow-2xl p-2">
     <div class="overflow-x-auto">
         <table class="w-full">
             {{ $slot }}

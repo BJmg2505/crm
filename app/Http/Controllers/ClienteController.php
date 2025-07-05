@@ -6,6 +6,9 @@ use App\Http\Requests\ClienteRequest;
 use App\Models\Etapa;
 use App\Services\ClienteService;
 use Illuminate\Http\Request;
+use App\Models\Cliente;
+use App\Models\Contacto;
+
 
 class ClienteController extends Controller
 {
@@ -52,11 +55,11 @@ class ClienteController extends Controller
                         'cargo' => 'required|bail',
                     ],
                     [
-                        'nombre.required' => 'El "Nombre" es obligatorio.',
-                        'dni.required' => 'El "DNI" es obligatorio.',
-                        'dni.numeric' => 'El "DNI" debe ser numérico.',
-                        'dni.digits' => 'El "DNI" debe tener exactamente 8 dígitos.',
-                        'cargo.required' => 'El "Cargo" es obligatorio.',
+                        'nombre.required' => 'El Nombre es obligatorio.',
+                        'dni.required' => 'El DNI es obligatorio.',
+                        'dni.numeric' => 'El DNI debe ser numérico.',
+                        'dni.digits' => 'El DNI debe tener exactamente 8 dígitos.',
+                        'cargo.required' => 'El Cargo es obligatorio.',
                     ]
                 );
             }
@@ -70,11 +73,11 @@ class ClienteController extends Controller
                         'sucursal_distrito_codigo' => 'required|bail',
                     ],
                     [
-                        'sucursal_nombre.required' => 'El "Nombre de Sucursal" es obligatorio.',
-                        'sucursal_direccion.required' => 'La "Dirección de Sucursal" es obligatoria.',
-                        'sucursal_departamento_codigo.required' => 'El "Departamento de Sucursal" es obligatorio.',
-                        'sucursal_provincia_codigo.required' => 'La "Provincia de Sucursal" es obligatoria.',
-                        'sucursal_distrito_codigo.required' => 'El "Distrito de Sucursal" es obligatorio.',
+                        'sucursal_nombre.required' => 'El Nombre es obligatorio.',
+                        'sucursal_direccion.required' => 'La Dirección es obligatoria.',
+                        'sucursal_departamento_codigo.required' => 'El Departamento es obligatorio.',
+                        'sucursal_provincia_codigo.required' => 'La Provincia es obligatoria.',
+                        'sucursal_distrito_codigo.required' => 'El Distrito es obligatorio.',
                     ]
                 );
             }
@@ -98,10 +101,17 @@ class ClienteController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+
     public function edit(string $id)
     {
-        //
+        $cliente = Cliente::findOrFail($id);
+
+        // Cargar contactos ordenados (más recientes primero)
+        $contactos = $cliente->contactos()->orderByDesc('created_at')->get();
+
+        return view('sistema.cliente.edit', compact('cliente', 'contactos'));
     }
+
 
     /**
      * Update the specified resource in storage.

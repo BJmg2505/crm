@@ -1,5 +1,5 @@
 <header class="container-fluid p-0">
-    <div class="mb-2 p-3 rounded-3xl  shadow-md" style="background-color: #ffffff;">
+    <div class="mb-2 p-3 rounded-3xl  shadow-md" style="background-color: #f1f1f1;">
         <nav class="flex justify-between items-center">
             <!-- Mensaje de bienvenida y frase motivadora -->
             <div>

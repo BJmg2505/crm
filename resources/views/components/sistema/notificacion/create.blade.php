@@ -3,53 +3,142 @@
     'botonFooter' => '',
     'notificacion' => false,
 ])
-<x-sistema.card class="m-2 mb-4 mx-0">
-    <div class="d-flex flex-row flex-wrap justify-content-between">
+
+<x-sistema.card class="p-4 m-2 mb-4 mx-0 bg-white shadow-md rounded-lg">
+    {{-- Header --}}
+    <div class="d-flex flex-wrap justify-between items-center mb-3">
         <x-sistema.titulo title="Agenda *" />
-        <div class="flex flex-row gap-2">
+        <div class="flex gap-2">
             {{ $botonHeader }}
         </div>
     </div>
-    <div class="form-group">
-        <label for="notificaciontipo_id" class="form-control-label">Tipo de Agenda</label>
-        <select class="form-control" id="notificaciontipo_id" name="notificaciontipo_id">
-            @foreach ($notificaciontipos as $value)
-                <option value="{{ $value->id }}">{{ $value->nombre }}</option>
-            @endforeach
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="mensaje" class="form-control-label">Mensaje</label>
-        <textarea class="form-control" rows="3" id="mensaje" name="mensaje"></textarea>
-    </div>
-    <div class="form-group">
-        <label for="fecha" class="form-control-label">Fecha y Hora</label>
-        <div class="row">
-            <div class="col">
-                <input class="form-control" type="date" value="{{ $fecha }}" id="fecha" name="fecha">
-            </div>
-            <div class="col">
-                <input class="form-control" type="time" value="" id="hora" name="hora">
-            </div>
+
+    {{-- Formulario de nueva notificación --}}
+    <div class="row gx-3 gy-2 align-items-end mb-3">
+        <div class="col-md-6">
+            <label for="notificaciontipo_id" class="form-label">Tipo de Agenda</label>
+            <select class="form-select" id="notificaciontipo_id" name="notificaciontipo_id">
+                @foreach ($notificaciontipos as $value)
+                    <option value="{{ $value->id }}">{{ $value->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="fecha" class="form-label">Fecha</label>
+            <input class="form-control" type="date" value="{{ $fecha }}" id="fecha" name="fecha">
+        </div>
+        <div class="col-md-3">
+            <label for="hora" class="form-label">Hora</label>
+            <input class="form-control" type="time" id="hora" name="hora">
         </div>
     </div>
-    {{ $botonFooter }}
-    <div class="flex-auto" id="notificacions">
-        @if ($notificacion)
-            @foreach ($notificacion as $item)
-                <div class="mb-4" id="{{ $item->id }}">
-                    <span class="text-slate-900 text-base font-semibold">{{ $item->asunto }}</span>
-                    <div class="text-end">
-                        <span class="text-slate-500 text-xs uppercase me-2">
-                            <i class="text-blue-400 fa-solid fa-user"></i> {{ $item->user->name }}
-                        </span>
-                        <span class="text-slate-500 text-sm">
-                            <i class="text-blue-400 fa-solid fa-calendar-days"></i> {{  now()->parse($item->fecha)->format('d-m-Y') }} {{ now()->parse($item->hora)->format(' h:i:s A') }}
-                        </span>
+
+    <div class="mb-4">
+        <textarea class="form-control" id="mensaje" name="mensaje" rows="3" placeholder="Escribe tu mensaje..."></textarea>
+    </div>
+
+    @if ($botonFooter)
+        <div class="text-end mb-3">
+            {{ $botonFooter }}
+        </div>
+    @endif
+
+    {{-- Lista de Notificaciones --}}
+    @if ($notificacion && count($notificacion))
+        <div id="notificaciones-lista" class="border-t pt-1">
+            @foreach ($notificacion as $index => $item)
+                <div class="notificacion-item {{ $index >= 2 ? 'd-none notificacion-extra' : '' }} p-3 mb-1 border rounded shadow-sm bg-white"
+                    id="notificacion-{{ $item->id }}">
+                    {{-- Mensaje --}}
+                    <div class="text-muted" style="font-size: 0.95rem; margin-top: 2px; white-space: pre-line;">
+    {{ trim($item->mensaje) }}
+</div>
+                    {{-- Cabecera: Asunto a la izquierda / Usuario + Fecha-Hora a la derecha --}}
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="fw-semibold text-orange-600 fs-6">{{ $item->asunto }}</div>
+
+                        <div class="d-flex gap-3 text-sm text-orange-600">
+                            <div class="d-flex align-items-center gap-1">
+                                <i class="fa-solid fa-user text-orange-500"></i>
+                                <span>{{ $item->user->name }}</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-1">
+                                <i class="fa-solid fa-calendar-days text-orange-500"></i>
+                                <span>
+                                    {{ \Carbon\Carbon::parse($item->fecha)->format('d-m-Y') }}
+                                    {{ \Carbon\Carbon::parse($item->hora)->format('h:i A') }}
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <hr>
             @endforeach
-        @endif
-    </div>
+
+            {{-- Botón Ver Más/Ver Menos --}}
+            @if (count($notificacion) > 2)
+                <div class="text-center mt-3">
+                    <button class="btn btn-outline-secondary btn-sm" id="btn-toggle-notificaciones"
+                        onclick="toggleNotificaciones()">
+                        Ver más <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                </div>
+            @endif
+        </div>
+    @endif
 </x-sistema.card>
+
+<script>
+    let notificacionesExpandido = false;
+
+    function toggleNotificaciones() {
+        const extras = document.querySelectorAll('.notificacion-extra');
+        const btn = document.getElementById('btn-toggle-notificaciones');
+
+        extras.forEach(el => el.classList.toggle('d-none'));
+        notificacionesExpandido = !notificacionesExpandido;
+
+        btn.innerHTML = notificacionesExpandido
+            ? 'Ver menos <i class="fa-solid fa-chevron-up"></i>'
+            : 'Ver más <i class="fa-solid fa-chevron-down"></i>';
+    }
+
+    function guardarNotificacion() {
+        const cliente_id = $('#cliente_id').val(); // Asegúrate de tener este ID en tu formulario
+        const data = {
+            notificaciontipo_id: $('#notificaciontipo_id').val(),
+            fecha: $('#fecha').val(),
+            hora: $('#hora').val(),
+            mensaje: $('#mensaje').val(),
+        };
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.post(`/cliente-gestion/${cliente_id}`, {
+            ...data,
+            view: 'store-notificacion'
+        })
+        .done(() => {
+            $('#mensaje').val('');
+            actualizarListaNotificaciones();
+        })
+        .fail(() => {
+            alert('Error al guardar la notificación.');
+        });
+    }
+
+    function actualizarListaNotificaciones() {
+        const cliente_id = $('#cliente_id').val();
+
+        $.get(`/cliente-gestion/${cliente_id}`, {
+            view: 'get-notificaciones'
+        }, function (html) {
+            $('#notificaciones-lista-container').html(html);
+            notificacionesExpandido = false; // reinicia estado
+        });
+    }
+</script>
+

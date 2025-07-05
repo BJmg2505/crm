@@ -1,10 +1,17 @@
 @props(['type' => 'middle', 'title', 'count', 'color' => '#ccc', 'active' => false])
 
-<div class="etapa-item {{ $active ? 'active' : '' }}" style="--bg-color: {{ $color }}; --etapas-total: 12;">
-    <button {{ $attributes->merge(['class' => 'etapa-btn' . ($active ? ' active' : '')]) }}>
+<div class="etapa-item {{ $active ? 'active' : '' }}"
+    style="--bg-color: {{ $color }}; --etapas-total: {{ $totalEtapas ?? 12 }};" role="progressbar"
+    aria-valuenow="{{ $count }}" aria-valuemin="0" aria-valuemax="{{ $totalEtapas ?? 12 }}">
+    <button {{ $attributes->merge(['class' => 'etapa-btn' . ($active ? ' active' : '')]) }}
+        aria-current="{{ $active ? 'true' : 'false' }}">
         <div class="etapa-content">
-            <span class="etapa-title">{{ $title }}</span>
-            <span class="etapa-count">{{ $count }}</span>
+            <span class="etapa-title" aria-label="{{ __('Etapa') }}: {{ $title }}">
+                {{ $title }}
+            </span>
+            <span class="etapa-count" aria-hidden="true">
+                {{ $count }}
+            </span>
         </div>
     </button>
 </div>
@@ -36,7 +43,7 @@
         height: 85%;
         border: none;
         background: var(--bg-color);
-        color: ##EB5C1F;
+        color: #ffffff;
         font-weight: 700;
         position: relative;
         padding: 0 5px;
@@ -61,10 +68,10 @@
 
     /* Estados activos */
     .etapa-btn.active {
-        color: rgb(255, 255, 255);
+        color: #ffffff;
         z-index: 2;
-        transform: scale(1.12);
-        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+        transform: scale(1.18);
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
     }
 
     /* Contenido */
@@ -78,7 +85,7 @@
         overflow: hidden;
     }
 
-    
+
 
     .etapa-title {
         font-size: clamp(0.5rem, 1.5vw, 0.7rem);

@@ -1,278 +1,191 @@
 @props([
     'botonHeader' => '',
     'botonFooter' => '',
-    'sucursales' => false,
+    'sucursales' => [],
+    'cliente' => null,
 ])
+
 @php
-    $departamentos =  \App\Models\Departamento::orderBy('nombre')->get();
+    $departamentos = \App\Models\Departamento::orderBy('nombre')->get();
 @endphp
-<x-sistema.card class="m-2" x-data="sucursalForm()" x-ref="sucursalComponente" x-init="init()">
-    <div class="d-flex flex-row flex-wrap justify-content-between">
+
+<input type="hidden" id="cliente_id" value="{{ $cliente->id ?? '' }}">
+
+<x-sistema.card class="p-4 m-2 mb-2 mx-0" x-data="sucursalForm()" x-init="init()">
+    {{-- Encabezado --}}
+    <div class="d-flex flex-row flex-wrap justify-between items-center mb-3">
         <x-sistema.titulo title="Sucursales" />
-        <div class="flex flex-row gap-2">
-            {{ $botonHeader }}
+        @role('ejecutivo')
+            <div class="flex flex-row gap-2">
+                <button class="btn btn-primary" @click="nuevaSucursal()">+ Nueva Sucursal</button>
+            </div>
+        @endrole
+    </div>
+
+    {{-- Formulario de sucursal --}}
+    <div class="row g-3 bg-gray-100 px-3 py-4 rounded mb-4" x-show="modoEdicion">
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Nombre de Sucursal *" x-model="form.nombre">
+        </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Dirección *" x-model="form.direccion">
+        </div>
+
+        <div class="col-md-4">
+            <select class="form-control" x-model="form.departamento_codigo" @change="fetchProvincias">
+                <option value="">Departamento *</option>
+                @foreach ($departamentos as $item)
+                    <option value="{{ $item->codigo }}">{{ $item->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-md-4">
+            <select class="form-control" x-model="form.provincia_codigo" @change="fetchDistritos">
+                <option value="">Provincia *</option>
+                <template x-for="prov in provincias" :key="prov.codigo">
+                    <option :value="prov.codigo" x-text="prov.nombre"></option>
+                </template>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <select class="form-control" x-model="form.distrito_codigo">
+                <option value="">Distrito *</option>
+                <template x-for="dist in distritos" :key="dist.codigo">
+                    <option :value="dist.codigo" x-text="dist.nombre"></option>
+                </template>
+            </select>
+        </div>
+
+        <div class="col-12 form-check form-switch ms-3">
+            <input class="form-check-input" type="checkbox" x-model="form.facilidad_tecnica" id="fac_tecnica">
+            <label class="form-check-label ms-2" for="fac_tecnica">Facilidades Técnicas</label>
+        </div>
+
+        <div class="col-12 text-end">
+            <button class="btn btn-primary" @click="guardarSucursal()">Guardar</button>
+            <button class="btn btn-secondary" @click="cancelarSucursal()">Cancelar</button>
         </div>
     </div>
-    <div class="row">
-        @role('ejecutivo')
-        <div class="col-12">
-            <div class="row">
-                <div class="col-6">
-                    <input class="form-control"
-                        type="hidden"
-                        id="sucursal_id"
-                        name="sucursal_id"
-                        x-model="form.sucursal_id">
-                    <div class="form-group">
-                        <label for="sucursal_nombre" class="form-control-label">Nombre *</label>
-                        <input class="form-control"
-                            type="text"
-                            id="sucursal_nombre"
-                            name="sucursal_nombre"
-                            x-model="form.sucursal_nombre">
-                    </div>
-                    <div class="form-group">
-                        <label for="sucursal_direccion" class="form-control-label">Dirección *</label>
-                        <input class="form-control"
-                            type="text"
-                            id="sucursal_direccion"
-                            name="sucursal_direccion"
-                            x-model="form.sucursal_direccion">
-                    </div>
-                    <div class="form-check form-switch">
-                        <label class="form-check-label" for="sucursal_facilidad_tecnica">Facilidades técnicas</label>
-                        <input class="form-check-input"
-                            type="checkbox"
-                            id="sucursal_facilidad_tecnica"
-                            name="sucursal_facilidad_tecnica"
-                            x-model="form.sucursal_facilidad_tecnica"
-                            :checked="form.sucursal_facilidad_tecnica == true">
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label class="form-control-label">Departamento *</label>
-                        <select class="form-control"
-                            id="sucursal_departamento_codigo"
-                            x-model="form.sucursal_departamento_codigo"
-                            @change="fetchProvinciasSucursal">
-                            <option></option>
-                            @foreach ($departamentos as $item)
-                                <option value="{{ $item->codigo }}">{{ $item->nombre }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label">Provincia *</label>
-                        <select class="form-control"
-                            id="sucursal_provincia_codigo"
-                            x-model="form.sucursal_provincia_codigo"
-                            @change="fetchDistritosSucursal">
-                            <option></option>
-                            <template x-for="prov in sucursal_provincias" :key="prov.codigo">
-                                <option :value="prov.codigo" x-text="prov.nombre"></option>
-                            </template>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label">Distrito *</label>
-                        <select class="form-control"
-                            id="sucursal_distrito_codigo"
-                            x-model="form.sucursal_distrito_codigo">
-                            <option></option>
-                            <template x-for="dist in sucursal_distritos" :key="dist.codigo">
-                                <option :value="dist.codigo" x-text="dist.nombre"></option>
-                            </template>
-                        </select>
-                    </div>
-                    {{ $botonFooter }}
-                </div>
-            </div>
-        </div>
-        @endrole
-        <div class="col-12">
-            <div class="table-responsive">
-                <table class="table align-items-center mb-0">
-                    <thead>
-                        <tr>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Sucursal</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Direccion</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Facilidad Técnica</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="sucursales">
-                        @if ($sucursales)
-                            @foreach ($sucursales as $value)
-                            <tr id="{{ $value['id'] }}">
-                                <td class="align-middle text-uppercase text-sm">
-                                    <span class="text-secondary text-xs font-weight-normal">{{ $value['nombre'] }}</span>
-                                </td>
-                                <td class="align-middle text-uppercase text-sm">
-                                    <span class="text-secondary text-xs font-weight-normal">{{ $value['direccion'] }}</span>
-                                </td>
-                                <td class="align-middle text-uppercase text-sm">
-                                    <span class="text-secondary text-xs font-weight-normal">{{ $value['facilidad_tecnica'] == true ? 'SI' : 'NO' }}</span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <button class="btn btn-sm btn-primary" type="button"
-                                        @click="editarSucursal({ 
-                                            sucursal_id: '{{ $value['id'] }}',
-                                            sucursal_nombre: '{{ $value['nombre'] }}',
-                                            sucursal_direccion: '{{ $value['direccion'] }}',
-                                            sucursal_facilidad_tecnica: '{{ $value['facilidad_tecnica'] }}',
-                                            sucursal_departamento_codigo: '{{ $value['departamento_codigo'] }}',
-                                            sucursal_provincia_codigo: '{{ $value['provincia_codigo'] }}',
-                                            sucursal_distrito_codigo: '{{ $value['distrito_codigo'] }}',
-                                        })">
-                                        Editar
-                                    </button>
-                                </td>
-                            </tr>
-                            @endforeach
-                        @endif
-                    </tbody>
-                </table>
-            </div>
-        </div>
+
+    {{-- Tabla de sucursales --}}
+    <div class="table-responsive">
+        <table class="table table-sm table-hover bg-white border rounded text-sm text-center">
+            <thead class="bg-light">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Dirección</th>
+                    <th>Facilidad Técnica</th>
+                    <th>Ubicación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($sucursales as $sucursal)
+                    <tr>
+                        <td>{{ $sucursal['nombre'] }}</td>
+                        <td>{{ $sucursal['direccion'] }}</td>
+                        <td>{{ $sucursal['facilidad_tecnica'] ? 'Sí' : 'No' }}</td>
+                        <td>{{ $sucursal['departamento_nombre'] ?? '' }} - {{ $sucursal['provincia_nombre'] ?? '' }} - {{ $sucursal['distrito_nombre'] ?? '' }}</td>
+                        <td>
+                            <i class="fas fa-edit text-primary cursor-pointer"
+                                @click="editarSucursal({{ json_encode($sucursal) }})" title="Editar"></i>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 </x-sistema.card>
+
+{{-- Alpine JS --}}
 <script>
     function sucursalForm() {
         return {
+            modoEdicion: false,
+            provincias: [],
+            distritos: [],
             form: {
-                sucursal_id: null,
-                sucursal_nombre: '',
-                sucursal_direccion: '',
-                sucursal_facilidad_tecnica: '',
-                sucursal_departamento_codigo: '',
-                sucursal_provincia_codigo: '',
-                sucursal_distrito_codigo: '',
+                id: null,
+                nombre: '',
+                direccion: '',
+                facilidad_tecnica: false,
+                departamento_codigo: '',
+                provincia_codigo: '',
+                distrito_codigo: ''
             },
-            sucursal_provincias: [],
-            sucursal_distritos: [],
+            init() {},
+            nuevaSucursal() {
+                this.resetForm();
+                this.modoEdicion = true;
+            },
+            editarSucursal(sucursal) {
+                this.form = {
+                    id: sucursal.id,
+                    nombre: sucursal.nombre,
+                    direccion: sucursal.direccion,
+                    facilidad_tecnica: sucursal.facilidad_tecnica,
+                    departamento_codigo: sucursal.departamento_codigo,
+                    provincia_codigo: sucursal.provincia_codigo,
+                    distrito_codigo: sucursal.distrito_codigo
+                };
+                this.modoEdicion = true;
+                this.fetchProvincias().then(() => this.fetchDistritos());
+            },
+            cancelarSucursal() {
+                this.modoEdicion = false;
+                this.resetForm();
+            },
             resetForm() {
                 this.form = {
-                    sucursal_id: null,
-                    sucursal_nombre: '',
-                    sucursal_direccion: '',
-                    sucursal_departamento_codigo: '',
-                    sucursal_provincia_codigo: '',
-                    sucursal_distrito_codigo: '',
-                    sucursal_facilidad_tecnica: ''
+                    id: null,
+                    nombre: '',
+                    direccion: '',
+                    facilidad_tecnica: false,
+                    departamento_codigo: '',
+                    provincia_codigo: '',
+                    distrito_codigo: ''
                 };
+                this.provincias = [];
+                this.distritos = [];
             },
-            async fetchProvinciasSucursal() {
-                this.form.sucursal_provincia_codigo = '';
-                this.form.sucursal_distrito_codigo = '';
-                this.sucursal_distritos = [];
-                if (this.form.sucursal_departamento_codigo) {
-                    const res = await fetch(`/api/provincias/${this.form.sucursal_departamento_codigo}`);
-                    this.sucursal_provincias = await res.json();
-                } else {
-                    this.sucursal_provincias = [];
+            async fetchProvincias() {
+                this.form.provincia_codigo = '';
+                this.form.distrito_codigo = '';
+                this.distritos = [];
+                if (this.form.departamento_codigo) {
+                    const res = await fetch(`/api/provincias/${this.form.departamento_codigo}`);
+                    this.provincias = await res.json();
                 }
             },
-            async fetchDistritosSucursal() {
-                this.form.sucursal_distrito_codigo = '';
-                if (this.form.sucursal_departamento_codigo && this.form.sucursal_provincia_codigo) {
-                    const res = await fetch(`/api/distritos/${this.form.sucursal_departamento_codigo}/${this.form.sucursal_provincia_codigo}`);
-                    this.sucursal_distritos = await res.json();
-                } else {
-                    this.sucursal_distritos = [];
+            async fetchDistritos() {
+                this.form.distrito_codigo = '';
+                if (this.form.departamento_codigo && this.form.provincia_codigo) {
+                    const res = await fetch(`/api/distritos/${this.form.departamento_codigo}/${this.form.provincia_codigo}`);
+                    this.distritos = await res.json();
                 }
             },
-            async editarSucursal(sucursal) {
-                this.form.sucursal_departamento_codigo = sucursal.sucursal_departamento_codigo;
-                this.form.sucursal_provincia_codigo = '';
-                this.form.sucursal_distrito_codigo = '';
+            guardarSucursal() {
+                const cliente_id = document.getElementById('cliente_id').value;
 
-                await this.fetchProvinciasSucursal();
-
-                this.form.sucursal_provincia_codigo = sucursal.sucursal_provincia_codigo;
-
-                await this.fetchDistritosSucursal();
-
-                // Ahora completamos los demás campos del formulario
-                this.form.sucursal_id = sucursal.sucursal_id;
-                this.form.sucursal_nombre = sucursal.sucursal_nombre;
-                this.form.sucursal_direccion = sucursal.sucursal_direccion;
-                this.form.sucursal_distrito_codigo = sucursal.sucursal_distrito_codigo;
-                this.form.sucursal_facilidad_tecnica = sucursal.sucursal_facilidad_tecnica;
-            },
-            async init() {
-                if (this.form.sucursal_departamento_codigo) {
-                    await this.fetchProvinciasSucursal();
-                    if (this.form.sucursal_provincia_codigo) {
-                        await this.fetchDistritosSucursal();
-                    }
+                if (!this.form.nombre || !this.form.direccion || !this.form.departamento_codigo || !this.form.provincia_codigo || !this.form.distrito_codigo) {
+                    alert('Todos los campos son obligatorios');
+                    return;
                 }
-            },
-            async saveSucursal() {
-                const dialog = document.querySelector("#dialog");
-                dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
-                    element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element
-                .remove();
-                });
-                let cliente_id = $('#cliente_id').val();
-                $.ajaxSetup({
+
+                fetch(`/cliente-gestion/${cliente_id}`, {
+                    method: 'PUT',
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: `cliente-gestion/${cliente_id}`,
-                    method: "PUT",
-                    data: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
                         view: 'update-sucursal',
-                        sucursal_id: $('#sucursal_id').val(),
-                        sucursal_nombre: $('#sucursal_nombre').val(),
-                        sucursal_direccion: $('#sucursal_direccion').val(),
-                        sucursal_facilidad_tecnica: $('#sucursal_facilidad_tecnica').is(':checked'),
-                        sucursal_departamento_codigo: $('#sucursal_departamento_codigo').val(),
-                        sucursal_provincia_codigo: $('#sucursal_provincia_codigo').val(),
-                        sucursal_distrito_codigo: $('#sucursal_distrito_codigo').val(),
-                    },
-                    success: function(result) {
-                        let alpineComponent = Alpine.$data(document.querySelector('[x-ref="sucursalComponente"]'));
-                        alpineComponent.resetForm();
-                        alpineComponent.listSucursales(result);
-                    },
-                    error: function(response) {
-                        mostrarError(response);
-                    }
-                });
-            },
-            listSucursales(sucursales) {
-                let html = "";
-                sucursales.forEach(function(sucursal) {
-                    html += `<tr id="${sucursal.id}">
-                                <td class="align-middle text-uppercase text-sm">
-                                    <span class="text-secondary text-xs font-weight-normal">${sucursal.nombre}</span>
-                                </td>
-                                <td class="align-middle text-uppercase text-sm">
-                                    <span class="text-secondary text-xs font-weight-normal">${sucursal.direccion}</span>
-                                </td>
-                                <td class="align-middle text-uppercase text-sm">
-                                    <span class="text-secondary text-xs font-weight-normal">${sucursal.facilidad_tecnica ? 'SI' : 'NO'}</span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <button class="btn btn-sm btn-primary" type="button"
-                                        @click="editarSucursal({
-                                            sucursal_id: '${sucursal.id}',
-                                            sucursal_nombre: '${sucursal.nombre}',
-                                            sucursal_direccion: '${sucursal.direccion}',
-                                            sucursal_facilidad_tecnica: '${sucursal.facilidad_tecnica}',
-                                            sucursal_departamento_codigo: '${sucursal.departamento_codigo}',
-                                            sucursal_provincia_codigo: '${sucursal.provincia_codigo}',
-                                            sucursal_distrito_codigo: '${sucursal.distrito_codigo}',
-                                        })">
-                                        Editar
-                                    </button>
-                                </td>
-                            </tr>`;
+                        ...this.form
+                    })
                 })
-                $('#sucursales').html(html);
+                .then(res => res.json())
+                .then(() => location.reload())
+                .catch(() => alert('Error al guardar sucursal'));
             }
         };
     }

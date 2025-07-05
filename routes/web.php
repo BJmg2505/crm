@@ -32,6 +32,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UbigeoController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
+use App\Http\Controllers\ContactoController;
 
 // Ruta para la página de componentes
 Route::get('/components', function () {
@@ -86,7 +87,7 @@ Route::middleware([
     ]);
 
     Route::get('/api/provincias/{departamento}', [UbigeoController::class, 'provincias']);
-    Route::get('/api/distritos/{departamento}/{provincia}', [UbigeoController::class, 'distritos']);    
+    Route::get('/api/distritos/{departamento}/{provincia}', [UbigeoController::class, 'distritos']);
 
     // Ruta adicional para la descarga de archivos
     Route::get('/files/{id}/download', [FileController::class, 'download'])->name('files.download');
@@ -118,6 +119,12 @@ Route::middleware([
         Route::post('', [FolderController::class, 'store'])->name('folders.store');
         Route::delete('{folder}', [FolderController::class, 'destroy'])->name('folders.destroy');
     });
+
+    // routes/web.php
+
+  
+
+    Route::post('/contactos', [ContactoController::class, 'store'])->name('contactos.store');
 });
 
 Livewire::setScriptRoute(function ($handle) {

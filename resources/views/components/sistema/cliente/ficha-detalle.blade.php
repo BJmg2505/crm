@@ -11,102 +11,163 @@
     $ventas = $data['ventas'];
     $notificacion = $data['notificacion'];
 @endphp
-<x-sistema.modal title="Detalle Cliente" dialog_id="dialog" :$onclickCloseModal style="width: 90vw;">
+<x-sistema.modal title="Detalle Cliente" dialog_id="dialog" :$onclickCloseModal style="width: 80vw;">
     <div style="display: none;">
         <input type="hidden" id="cliente_id" name="cliente_id" value="{{ $cliente->id }}">
     </div>
-    <div class="row p-1 color: bg-white">
-        <div class="col-10 p-0">
-            <div class="row p-1 m-2">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-6 p-1">
-                            <x-sistema.cliente.datos :$cliente>
-                                @role(['ejecutivo', 'sistema'])
-                                    <x-slot:botonHeader>
-                                        <button type="button" class="btn bg-gradient-secondary" onclick="editCliente()"
-                                            id="btn_editar_cliente">Editar</button>
-                                        <button type="button" class="btn bg-gradient-secondary" onclick="saveCliente()"
-                                            id="btn_guardar_cliente" disabled>Guardar</button>
-                                    </x-slot>
-                                @endrole
-                            </x-sistema.cliente.datos>
-                            <x-sistema.cliente.contactos :$contactos>
-                                @role('ejecutivo')
-                                    <x-slot:botonFooter>
-                                        <button type="button" class="btn bg-gradient-secondary" onclick="saveContacto()"
-                                            id="btn_guardar_contacto">Guardar</button>
-                                    </x-slot>
-                                @endrole
-                            </x-sistema.cliente.contactos>
-                            <x-sistema.cliente.sucursales :$sucursales>
-                                @role('ejecutivo')
-                                    <x-slot:botonFooter>
-                                        <button type="button" class="btn bg-gradient-secondary" @click="saveSucursal()"
-                                            id="btn_guardar_sucursal">Guardar</button>
-                                    </x-slot>
-                                @endrole
-                            </x-sistema.cliente.sucursales>
-                        </div>
-                        <div class="col-6 p-1">
-                            <x-sistema.notificacion.create :$notificacion>
-                                @role('ejecutivo')
-                                    <x-slot:botonFooter>
-                                        <button type="button" class="btn bg-gradient-secondary"
-                                            onclick="saveNotificacion()">Agregar</button>
-                                    </x-slot>
-                                @endrole
-                            </x-sistema.notificacion.create>
-                            <x-sistema.cliente.ventas></x-sistema.cliente.ventas>
-                        </div>
-                    </div>
+    <div class="row p-1 bg-gray-200">
+        {{-- COLUMNA PRINCIPAL: 8 columnas --}}
+        <div class="m-0 p-2 col-md-8">
+            {{-- DATOS DEL CLIENTE --}}
+            <div class="mb-0">
+                <x-sistema.cliente.datos :$cliente>
+                    @role(['ejecutivo', 'sistema'])
+                        <x-slot:botonHeader>
+                            <button type="button" class="btn bg-primary text-white" onclick="editCliente()">Editar</button>
+                            <button type="button" class="btn bg-primary text-white" onclick="saveCliente()"
+                                id="btn_guardar_cliente" disabled>Guardar</button>
+                        </x-slot>
+                    @endrole
+                </x-sistema.cliente.datos>
+            </div>
+
+            {{-- DATOS ADICIONALES --}}
+            <div class="p-2 mb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <x-sistema.titulo title="Datos Del Adicionales" />
+                    <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-movistar', this)">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
                 </div>
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-10 mx-0 p-0">
-                            <x-sistema.cliente.comentarios :$comentarios>
-                                @role('ejecutivo')
-                                    <x-slot:botonFooter>
-                                        <button type="button" class="btn bg-gradient-secondary"
-                                            onclick="saveComentario()">Agregar</button>
-                                    </x-slot>
-                                @endrole
-                            </x-sistema.cliente.comentarios>
-                        </div>
-                        <div class="col-2 mx-0 p-0">
-                            <x-sistema.cliente.etapas>
-                                @role('ejecutivo')
-                                    <x-slot:botonFooter>
-                                        <button type="button" class="btn bg-gradient-secondary" onclick="editEtapa()"
-                                            id="btn_editar_etapa">Editar</button>
-                                        <button type="button" class="btn bg-gradient-secondary" onclick="saveEtapa()"
-                                            id="btn_guardar_etapa" disabled>Guardar</button>
-                                    </x-slot>
-                                @endrole
-                            </x-sistema.cliente.etapas>
-                        </div>
-                    </div>
+                <div id="panel-movistar" style="display: none;">
+                    <x-sistema.cliente.movistars :$movistar>
+                        
+                    </x-sistema.cliente.movistars>
+                </div>
+            </div>
+            {{-- AGENDA --}}
+            <div class="p-2 mb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <x-sistema.titulo title="Agenda" />
+                    <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-agenda', this)">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div id="panel-agenda" style="display: none;">
+                    <x-sistema.notificacion.create :$notificacion>
+                        @role('ejecutivo')
+                            <x-slot:botonFooter>
+                                <button type="button" class="btn bg-primary text-white"
+                                    onclick="saveNotificacion()">Agregar</button>
+                            </x-slot>
+                        @endrole
+                    </x-sistema.notificacion.create>
+                </div>
+            </div>
+            {{-- PRODUCTOS EN NEGOCIACIÓN --}}
+            <div class="p-2 mb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <x-sistema.titulo title="Productos en Negociación" />
+                    <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-ventas', this)">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div id="panel-ventas" style="display: none;">
+                    <x-sistema.cliente.ventas />
+                </div>
+            </div>
+
+            {{-- CONTACTOS --}}
+            <div class="p-2 mb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <x-sistema.titulo title="Contactos" />
+                    <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-contactos', this)">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div id="panel-contactos" style="display: none;">
+                    <x-sistema.cliente.contactos :$contactos>
+                        @role('ejecutivo')
+                            <x-slot:botonFooter>
+                                <button type="button" class="btn bg-primary text-white" onclick="saveContacto()"
+                                    id="btn_guardar_contacto">Guardar</button>
+                            </x-slot>
+                        @endrole
+                    </x-sistema.cliente.contactos>
+                </div>
+            </div>
+
+            {{-- SUCURSALES --}}
+            <div class="p-2 mb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <x-sistema.titulo title="Sucursales" />
+                    <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-sucursales', this)">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div id="panel-sucursales" style="display: none;">
+                    <x-sistema.cliente.sucursales :$sucursales>
+                        @role('ejecutivo')
+                            <x-slot:botonFooter>
+                                <button type="button" class="btn bg-primary text-white" onclick="saveSucursal()"
+                                    id="btn_guardar_sucursal">Guardar</button>
+                            </x-slot>
+                        @endrole
+                    </x-sistema.cliente.sucursales>
                 </div>
             </div>
         </div>
-        <div class="col-2 p-0">
-            <x-sistema.cliente.movistars :$movistar>
-                @role('ejecutivo')
-                    <x-slot:botonFooter>
-                        <button type="button" class="btn bg-gradient-secondary" onclick="editMovistar()"
-                            id="btn_editar_movistar">Editar</button>
-                        <button type="button" class="btn bg-gradient-secondary" onclick="saveMovistar()"
-                            id="btn_guardar_movistar" disabled>Guardar</button>
-                    </x-slot>
-                @endrole
-            </x-sistema.cliente.movistars>
+
+        {{-- COLUMNA LATERAL: 4 columnas --}}
+        <div class="m-0 p-2 col-md-4">
+
+
+            {{-- ETAPA --}}
+            <div class="p-0 mb-1">
+                <x-sistema.cliente.etapas>
+                    @role('ejecutivo')
+                        <x-slot:botonFooter>
+                            <button type="button" class="btn bg-primary text-white" onclick="editEtapa()"
+                                id="btn_editar_etapa">Editar</button>
+                            <button type="button" class="btn bg-primary text-white" onclick="saveEtapa()"
+                                id="btn_guardar_etapa" disabled>Guardar</button>
+                        </x-slot>
+                    @endrole
+                </x-sistema.cliente.etapas>
+            </div>
+
+            {{-- COMENTARIOS --}}
+            <div class="p-0 mb-1">
+                <x-sistema.cliente.comentarios :$comentarios>
+                    @role('ejecutivo')
+                        <x-slot:botonFooter>
+                            <button type="button" class="btn bg-primary text-white"
+                                onclick="saveComentario()">Agregar</button>
+                        </x-slot>
+                    @endrole
+                </x-sistema.cliente.comentarios>
+            </div>
         </div>
     </div>
-    <div class="flex justify-end">
-        <button type="button" class="btn bg-gradient-primary m-0" onclick="{{ $onclickCloseModal }}">Cerrar</button>
+    {{-- BOTÓN CERRAR --}}
+    <div class="text-end mt-3" style="background: gray-100;">
+        <button type="button" class="btn btn-primary" onclick="{{ $onclickCloseModal }}">
+            <i class="fa-solid fa-xmark me-1"></i> Cerrar
+        </button>
     </div>
 </x-sistema.modal>
 <script>
+    function toggleSeccion(id, button) {
+        const panel = document.getElementById(id);
+        const icon = button.querySelector('i');
+        if (!panel || !icon) return;
+
+        const isVisible = panel.style.display === 'block';
+        panel.style.display = isVisible ? 'none' : 'block';
+        icon.classList.toggle('fa-chevron-down', isVisible);
+        icon.classList.toggle('fa-chevron-up', !isVisible);
+    }
+
     function editCliente() {
         $(`#ruc, #razon_social, #ciudad, #btn_guardar_cliente, #generado_bot,
             #departamento_codigo, #provincia_codigo, #distrito_codigo`).prop('disabled', false)
@@ -146,7 +207,7 @@
         const dialog = document.querySelector("#dialog");
         dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
             element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element
-        .remove();
+                .remove();
         });
         let cliente_id = $('#cliente_id').val();
         $.ajaxSetup({
@@ -217,11 +278,12 @@
         })
         $('#contactos').html(html);
     }
+
     function saveComentario() {
         const dialog = document.querySelector("#dialog");
         dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
             element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element
-        .remove();
+                .remove();
         });
         let cliente_id = $('#cliente_id').val();
         $.ajaxSetup({
@@ -276,7 +338,7 @@
         const dialog = document.querySelector("#dialog");
         dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
             element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element
-        .remove();
+                .remove();
         });
         $.ajaxSetup({
             headers: {
@@ -349,7 +411,7 @@
         const dialog = document.querySelector("#dialog");
         dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
             element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element
-        .remove();
+                .remove();
         });
         let cliente_id = $('#cliente_id').val();
         $.ajaxSetup({
@@ -397,7 +459,7 @@
         const dialog = document.querySelector("#dialog");
         dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
             element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element
-        .remove();
+                .remove();
         });
         let cliente_id = $('#cliente_id').val();
         $.ajaxSetup({

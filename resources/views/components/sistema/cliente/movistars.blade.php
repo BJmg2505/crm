@@ -3,93 +3,165 @@
     'botonFooter' => '',
     'movistar' => '',
 ])
-<x-sistema.card class="m-4 mb-2 mx-0">
-    <div class="d-flex flex-row flex-wrap justify-content-between">
+<x-sistema.card class="p-4 m-2 mb-2 mx-0">
+    <div class="d-flex flex-row flex-wrap justify-between items-center mb-2">
         <x-sistema.titulo title="Datos Adicionales" />
-        <div class="flex flex-row gap-2">
-            {{ $botonHeader }}
-        </div>
+        @role('ejecutivo')
+            <div class="flex flex-row gap-2">
+                <button class="btn btn-primary" id="btn-editar-datos" onclick="editarDatosAdicionales()">Editar</button>
+                <button class="btn btn-primary d-none" id="btn-guardar-datos"
+                    onclick="guardarDatosAdicionales()">Guardar</button>
+                <button class="btn btn-secondary d-none" id="btn-cancelar-datos"
+                    onclick="cancelarDatosAdicionales()">Cancelar</button>
+            </div>
+        @endrole
     </div>
-    @if ($config['datosAdicionales']['estadoWick'])
-        <div class="form-group">
-            <label for="estadowick_id" class="form-control-label">Estado Winforce</label>
-            <select class="form-control" id="estadowick_id" @php echo ($movistar != '' ? 'disabled' : '') @endphp>
-                @foreach ($estadowicks as $value)
-                    <option value="{{ $value->id }}">{{ $value->nombre }}</option>
-                @endforeach
-            </select>
-        </div>
-    @endif
-    {{-- @if ($config['datosAdicionales']['estadoDito'])
-        <div class="form-group">
-            <label for="estadodito_id" class="form-control-label">Estado Dito</label>
-            <select class="form-control" id="estadodito_id" @php echo ($movistar != '' ? 'disabled' : '') @endphp>
-                @foreach ($estadoditos as $value)
-                    <option value="{{ $value->id }}">{{ $value->nombre }}</option>
-                @endforeach
-            </select>
-        </div>
-    @endif --}}
-    @if ($config['datosAdicionales']['lineaClaro'])
-        <div class="form-group">
-            <label for="linea_claro" class="form-control-label">Score</label>
-            <input class="form-control" type="number" id="linea_claro" name="linea_claro" value="{{ $movistar->linea_claro ?? 0 }}" @php echo ($movistar != '' ? 'disabled' : '') @endphp>
-        </div>
-    @endif
-    @if ($config['datosAdicionales']['lineaEntel'])
-        <div class="form-group">
-            <label for="linea_entel" class="form-control-label">Cant. Trabajadores</label>
-            <input class="form-control" type="number" id="linea_entel" name="linea_entel" value="{{ $movistar->linea_entel ?? 0 }}" @php echo ($movistar != '' ? 'disabled' : '') @endphp>
-        </div>
-    @endif
-    @if ($config['datosAdicionales']['lineaBitel'])
-        <div class="form-group">
-            <label for="linea_bitel" class="form-control-label">Cant. Sucursales</label>
-            <input class="form-control" type="number" id="linea_bitel" name="linea_bitel" value="{{ $movistar->linea_bitel ?? 0 }}" @php echo ($movistar != '' ? 'disabled' : '') @endphp>
-        </div>
-    @endif
-    {{-- @if ($config['datosAdicionales']['lineaMovistar'])
-        <div class="form-group">
-            <label for="linea_movistar" class="form-control-label">Lineas Movistar</label>
-            <input class="form-control" type="number" id="linea_movistar" name="linea_movistar" value="{{ $movistar->linea_movistar ?? 0 }}" @php echo ($movistar != '' ? 'disabled' : '') @endphp>
-        </div>
-    @endif --}}
-    @if ($config['datosAdicionales']['tipoCliente'])
-        <div class="form-group">
-            <label for="clientetipo_id" class="form-control-label">Tipo Cliente</label>
-            <select class="form-control" id="clientetipo_id" @php echo ($movistar != '' ? 'disabled' : '') @endphp>
-                @foreach ($clientetipos as $value)
-                    <option value="{{ $value->id }}">{{ $value->nombre }}</option>
-                @endforeach
-            </select>
-        </div>
-    @endif
-    @if ($config['datosAdicionales']['ejecutivoSalesforce'])
-        <div class="form-group">
-            <label for="ejecutivo_salesforce" class="form-control-label">Dealer CRM</label>
-            <input class="form-control" type="text" id="ejecutivo_salesforce" name="ejecutivo_salesforce" value="{{ $movistar->ejecutivo_salesforce ?? '' }}" @php echo ($movistar != '' ? 'disabled' : '') @endphp>
-        </div>
-    @endif
-    {{-- @if ($config['datosAdicionales']['agencia'])
-        <div class="form-group">
-            <label for="agencia_id" class="form-control-label">Agencia</label>
-            <select class="form-control" id="agencia_id" @php echo ($movistar != '' ? 'disabled' : '') @endphp>
-                @foreach ($agencias as $value)
-                    <option value="{{ $value->id }}">{{ $value->nombre }}</option>
-                @endforeach
-            </select>
-        </div>
-    @endif --}}
+
+    <div class="row" id="form-datos-adicionales">
+        @if ($config['datosAdicionales']['estadoWick'])
+            <div class="col-md-4 mb-3">
+                <label for="estadowick_id">Estado Winforce</label>
+                <select class="form-control" id="estadowick_id" disabled>
+                    <option value="">Seleccione...</option>
+                    @foreach ($estadowicks as $value)
+                        <option value="{{ $value->id }}"
+                            {{ $movistar && $movistar->estadowick_id == $value->id ? 'selected' : '' }}>
+                            {{ $value->nombre }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        @endif
+
+        @if ($config['datosAdicionales']['lineaClaro'])
+            <div class="col-md-4 mb-3">
+                <label for="linea_claro">Score</label>
+                <input class="form-control" type="number" id="linea_claro" name="linea_claro"
+                    value="{{ $movistar->linea_claro ?? '' }}" disabled>
+            </div>
+        @endif
+
+        @if ($config['datosAdicionales']['lineaEntel'])
+            <div class="col-md-4 mb-3">
+                <label for="linea_entel">Cant. Trabajadores</label>
+                <input class="form-control" type="number" id="linea_entel" name="linea_entel"
+                    value="{{ $movistar->linea_entel ?? '' }}" disabled>
+            </div>
+        @endif
+
+        @if ($config['datosAdicionales']['lineaBitel'])
+            <div class="col-md-4 mb-3">
+                <label for="linea_bitel">Cant. Sucursales</label>
+                <input class="form-control" type="number" id="linea_bitel" name="linea_bitel"
+                    value="{{ $movistar->linea_bitel ?? '' }}" disabled>
+            </div>
+        @endif
+
+        @if ($config['datosAdicionales']['tipoCliente'])
+            <div class="col-md-4 mb-3">
+                <label for="clientetipo_id">Tipo de Cliente</label>
+                <select class="form-control" id="clientetipo_id" disabled>
+                    <option value="">Seleccione...</option>
+                    @foreach ($clientetipos as $value)
+                        <option value="{{ $value->id }}"
+                            {{ $movistar && $movistar->clientetipo_id == $value->id ? 'selected' : '' }}>
+                            {{ $value->nombre }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        @endif
+
+        @if ($config['datosAdicionales']['ejecutivoSalesforce'])
+            <div class="col-md-4 mb-3">
+                <label for="ejecutivo_salesforce">Dealer CRM</label>
+                <input class="form-control" type="text" id="ejecutivo_salesforce" name="ejecutivo_salesforce"
+                    value="{{ $movistar->ejecutivo_salesforce ?? '' }}" disabled>
+            </div>
+        @endif
+    </div>
+
     {{ $botonFooter }}
 </x-sistema.card>
+
 <script>
+    let datosOriginales = {};
+
+    function editarDatosAdicionales() {
+        datosOriginales = obtenerValoresFormulario();
+        $('#form-datos-adicionales :input').prop('disabled', false);
+        $('#btn-editar-datos').addClass('d-none');
+        $('#btn-guardar-datos, #btn-cancelar-datos').removeClass('d-none');
+    }
+
+    function cancelarDatosAdicionales() {
+        establecerValoresFormulario(datosOriginales);
+        $('#form-datos-adicionales :input').prop('disabled', true);
+        $('#btn-editar-datos').removeClass('d-none');
+        $('#btn-guardar-datos, #btn-cancelar-datos').addClass('d-none');
+    }
+
+    function obtenerValoresFormulario() {
+        return {
+            estadowick_id: $('#estadowick_id').val(),
+            linea_claro: $('#linea_claro').val(),
+            linea_entel: $('#linea_entel').val(),
+            linea_bitel: $('#linea_bitel').val(),
+            clientetipo_id: $('#clientetipo_id').val(),
+            ejecutivo_salesforce: $('#ejecutivo_salesforce').val(),
+        };
+    }
+
+    function establecerValoresFormulario(data) {
+        $('#estadowick_id').val(data.estadowick_id);
+        $('#linea_claro').val(data.linea_claro);
+        $('#linea_entel').val(data.linea_entel);
+        $('#linea_bitel').val(data.linea_bitel);
+        $('#clientetipo_id').val(data.clientetipo_id);
+        $('#ejecutivo_salesforce').val(data.ejecutivo_salesforce);
+    }
+
+    function guardarDatosAdicionales() {
+        const data = obtenerValoresFormulario();
+
+        // Validaciones básicas
+        if (data.clientetipo_id === '') {
+            alert('Debe seleccionar un tipo de cliente.');
+            return;
+        }
+
+        const cliente_id = $('#cliente_id').val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: `/cliente-gestion/${cliente_id}`,
+            method: 'PUT',
+            data: {
+                view: 'update-datos-adicionales',
+                ...data
+            },
+            success: function() {
+                $('#form-datos-adicionales :input').prop('disabled', true);
+                $('#btn-editar-datos').removeClass('d-none');
+                $('#btn-guardar-datos, #btn-cancelar-datos').addClass('d-none');
+                
+            },
+            error: function() {
+                alert('Ocurrió un error al guardar los datos.');
+            }
+        });
+    }
+
+    // Lógica extra si estadowick_id == 3
     $('#estadowick_id').on('change', function() {
         if ($(this).val() == 3) {
-            $('#estadodito_id').val(3);
-            $('#estadodito_id').prop('disabled', true);
+            $('#estadodito_id').val(3).prop('disabled', true);
         } else {
-            $('#estadodito_id').val(1);
-            $('#estadodito_id').prop('disabled', false);
+            $('#estadodito_id').val(1).prop('disabled', false);
         }
     });
 </script>

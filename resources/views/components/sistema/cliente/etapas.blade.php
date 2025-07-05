@@ -2,19 +2,33 @@
     'botonHeader' => '',
     'botonFooter' => '',
 ])
-<x-sistema.card class="m-2">
-    <div class="d-flex flex-row flex-wrap justify-content-between">
-        <x-sistema.titulo title="Etapa *" />
-        <div class="flex flex-row gap-2">
+
+<x-sistema.card class="p-4 m-1 mx-0">
+    {{-- Título y botones --}}
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <x-sistema.titulo title="Etapa" />
+        <div class="d-flex gap-2">
             {{ $botonHeader }}
         </div>
     </div>
-    <div class="form-group">
-        <select class="form-control" id="etapa_id" disabled>
-            @foreach ($etapas as $value)
-                <option value="{{ $value->id }}">{{ $value->nombre }}</option>
-            @endforeach
-        </select>
+
+    {{-- Selector compacto --}}
+    <div class="row align-items-center">
+        <div class="col-auto">
+            <label for="etapa_id" class="form-label mb-0 me-2 fw-bold">Etapa:</label>
+        </div>
+        <div class="col-auto">
+            <select class="form-select form-select-sm w-auto" id="etapa_id" disabled>
+                <option value="">Seleccionar</option>
+                @foreach ($etapas as $value)
+                    <option value="{{ $value->id }}">{{ $value->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
-    {{ $botonFooter }}
+
+    {{-- Footer --}}
+    <div class="mt-3 text-end">
+        {{ $botonFooter }}
+    </div>
 </x-sistema.card>
