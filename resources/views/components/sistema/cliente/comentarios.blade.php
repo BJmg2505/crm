@@ -16,8 +16,12 @@
     <!-- Área para nuevo comentario -->
     @role('ejecutivo')
         <div class="mb-3">
-            <textarea class="form-control form-control-sm" id="comentario" name="comentario" rows="2"
-                placeholder="Escribe tu comentario..."></textarea>
+            <textarea class="form-control form-control-sm"
+                id="comentario"
+                name="comentario"
+                rows="2"
+                placeholder="Escribe tu comentario...">
+            </textarea>
         </div>
     @endrole
 

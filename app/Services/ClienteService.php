@@ -5,10 +5,13 @@ namespace App\Services;
 use App\Models\Cliente;
 use App\Models\Comentario;
 use App\Models\Contacto;
+use App\Models\Departamento;
+use App\Models\Distrito;
 use App\Models\Equipo;
 use App\Models\Etapa;
 use App\Models\Exportcliente;
 use App\Models\Movistar;
+use App\Models\Provincia;
 use App\Models\Sucursal;
 use App\Models\Venta;
 
@@ -167,6 +170,10 @@ class ClienteService
         $data_sucursales = $cliente->sucursales()->orderBy('sucursals.id', 'desc')->limit(8)->get();
         $sucursales = [];
         foreach ($data_sucursales as $value) {
+            $departamentoNombre = Departamento::where('codigo', $value->departamento_codigo)->first()->nombre ?? '';
+            $provinciaNombre = Provincia::where('codigo', $value->provincia_codigo)->first()->nombre ?? '';
+            $distritoNombre = Distrito::where('codigo', $value->distrito_codigo)->first()->nombre ?? '';
+            $ubigeo = $departamentoNombre.' - '.$provinciaNombre.' - '.$distritoNombre;
             $sucursales[] = [
                 'id' => $value->id,
                 'nombre' => $value->nombre,
@@ -175,6 +182,7 @@ class ClienteService
                 'departamento_codigo' => $value->departamento_codigo,
                 'provincia_codigo' => $value->provincia_codigo,
                 'distrito_codigo' => $value->distrito_codigo,
+                'ubigeo' => $ubigeo,
             ];
         }
 

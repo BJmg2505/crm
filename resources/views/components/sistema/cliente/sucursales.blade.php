@@ -24,19 +24,19 @@
                         name="sucursal_id"
                         x-model="form.sucursal_id">
                     <div class="form-group">
-                        <label for="sucursal_nombre" class="form-control-label">Nombre *</label>
                         <input class="form-control"
                             type="text"
                             id="sucursal_nombre"
                             name="sucursal_nombre"
+                            placeholder="Nombre de Sucursal *"
                             x-model="form.sucursal_nombre">
                     </div>
                     <div class="form-group">
-                        <label for="sucursal_direccion" class="form-control-label">Dirección *</label>
                         <input class="form-control"
                             type="text"
                             id="sucursal_direccion"
                             name="sucursal_direccion"
+                            placeholder="Dirección *"
                             x-model="form.sucursal_direccion">
                     </div>
                     <div class="form-check form-switch">
@@ -51,35 +51,32 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label class="form-control-label">Departamento *</label>
                         <select class="form-control"
                             id="sucursal_departamento_codigo"
                             x-model="form.sucursal_departamento_codigo"
                             @change="fetchProvinciasSucursal">
-                            <option></option>
+                            <option>Departamento *</option>
                             @foreach ($departamentos as $item)
                                 <option value="{{ $item->codigo }}">{{ $item->nombre }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label">Provincia *</label>
                         <select class="form-control"
                             id="sucursal_provincia_codigo"
                             x-model="form.sucursal_provincia_codigo"
                             @change="fetchDistritosSucursal">
-                            <option></option>
+                            <option>Provincia *</option>
                             <template x-for="prov in sucursal_provincias" :key="prov.codigo">
                                 <option :value="prov.codigo" x-text="prov.nombre"></option>
                             </template>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label">Distrito *</label>
                         <select class="form-control"
                             id="sucursal_distrito_codigo"
                             x-model="form.sucursal_distrito_codigo">
-                            <option></option>
+                            <option>Distrito *</option>
                             <template x-for="dist in sucursal_distritos" :key="dist.codigo">
                                 <option :value="dist.codigo" x-text="dist.nombre"></option>
                             </template>
@@ -95,10 +92,11 @@
                 <table class="table align-items-center mb-0">
                     <thead>
                         <tr>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Sucursal</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nombre</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Direccion</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Facilidad Técnica</th>
-                            <th></th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Ubicación</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="sucursales">
@@ -113,6 +111,9 @@
                                 </td>
                                 <td class="align-middle text-uppercase text-sm">
                                     <span class="text-secondary text-xs font-weight-normal">{{ $value['facilidad_tecnica'] == true ? 'SI' : 'NO' }}</span>
+                                </td>
+                                <td class="align-middle text-uppercase text-sm">
+                                    <span class="text-secondary text-xs font-weight-normal">{{ $value['ubigeo'] }}</span>
                                 </td>
                                 <td class="align-middle text-center">
                                     <button class="btn btn-sm btn-primary" type="button"

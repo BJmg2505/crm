@@ -15,7 +15,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <x-sistema.titulo title="Datos Adicionales" />
                     <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-movistar', this)">
-                        <i class="fa fa-chevron-down"></i>
+                        <i class="fa fa-chevron-up"></i>
                     </button>
                 </div>
                 <div id="panel-movistar" style="display: block;">
@@ -28,10 +28,10 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <x-sistema.titulo title="Productos en Negociación" />
                     <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-ventas', this)">
-                        <i class="fa fa-chevron-down"></i>
+                        <i class="fa fa-chevron-up"></i>
                     </button>
                 </div>
-                <div id="panel-ventas" style="display: none;">
+                <div id="panel-ventas" style="display: block;">
                     <x-sistema.cliente.ventas />
                 </div>
             </div>
@@ -41,10 +41,10 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <x-sistema.titulo title="Contactos" />
                     <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-contactos', this)">
-                        <i class="fa fa-chevron-down"></i>
+                        <i class="fa fa-chevron-up"></i>
                     </button>
                 </div>
-                <div id="panel-contactos" style="display: none;">
+                <div id="panel-contactos" style="display: block;">
                     <x-sistema.cliente.contactos />
                 </div>
             </div>
@@ -54,10 +54,10 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <x-sistema.titulo title="Sucursales" />
                     <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-sucursales', this)">
-                        <i class="fa fa-chevron-down"></i>
+                        <i class="fa fa-chevron-up"></i>
                     </button>
                 </div>
-                <div id="panel-sucursales" style="display: none;">
+                <div id="panel-sucursales" style="display: block;">
                     <x-sistema.cliente.sucursales />
                 </div>
             </div>
@@ -169,4 +169,9 @@
         });
 
     }
+    // Funcion para limpiar el disabled de los inputs
+    $(document).ready(function () {
+        $('#form-datos-cliente :input').prop('disabled', false);
+        $('#form-datos-adicionales :input').prop('disabled', false);
+    });
 </script>

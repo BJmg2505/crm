@@ -23,9 +23,9 @@
                 <x-sistema.cliente.datos :$cliente>
                     @role(['ejecutivo', 'sistema'])
                         <x-slot:botonHeader>
-                            <button type="button" class="btn bg-primary text-white" onclick="editCliente()">Editar</button>
-                            <button type="button" class="btn bg-primary text-white" onclick="saveCliente()"
-                                id="btn_guardar_cliente" disabled>Guardar</button>
+                            <button class="btn btn-primary" id="btn-editar-cliente" onclick="editarCliente()">Editar</button>
+                            <button class="btn btn-primary d-none" id="btn-guardar-cliente" onclick="guardarCliente()">Guardar</button>
+                            <button class="btn btn-secondary d-none" id="btn-cancelar-cliente" onclick="cancelarCliente()">Cancelar</button>
                         </x-slot>
                     @endrole
                 </x-sistema.cliente.datos>

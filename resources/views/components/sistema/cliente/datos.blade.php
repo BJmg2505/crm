@@ -13,30 +13,42 @@
 <x-sistema.card class="p-4 m-2 mb-2 mx-0">
     <div class="d-flex flex-row flex-wrap justify-between items-center mb-3">
         <x-sistema.titulo title="Datos Del Cliente" />
-        @role('ejecutivo')
-            <div class="flex flex-row gap-2">
-                <button class="btn btn-primary" id="btn-editar-cliente" onclick="editarCliente()">Editar</button>
-                <button class="btn btn-primary d-none" id="btn-guardar-cliente" onclick="guardarCliente()">Guardar</button>
-                <button class="btn btn-secondary d-none" id="btn-cancelar-cliente" onclick="cancelarCliente()">Cancelar</button>
-            </div>
-        @endrole
+        <div class="flex flex-row gap-2">
+            {{ $botonHeader }}
+        </div>
     </div>
 
     <div class="row g-3" id="form-datos-cliente">
         {{-- RUC y Razón Social --}}
         <div class="col-md-4">
-            <input type="text" id="ruc" name="ruc" maxlength="11" class="form-control" placeholder="RUC *"
-                value="{{ $cliente->ruc ?? '' }}" disabled onchange="validarRuc(this)">
+            <input type="text"
+                id="ruc"
+                name="ruc"
+                maxlength="11"
+                class="form-control"
+                placeholder="RUC *"
+                value="{{ $cliente->ruc ?? '' }}"
+                onchange="validarRuc(this)"
+                disabled>
         </div>
         <div class="col-md-8">
-            <input type="text" id="razon_social" name="razon_social" class="form-control" placeholder="Razón Social *"
-                value="{{ $cliente->razon_social ?? '' }}" disabled>
+            <input type="text"
+                id="razon_social"
+                name="razon_social"
+                class="form-control"
+                placeholder="Razón Social *"
+                value="{{ $cliente->razon_social ?? '' }}"
+                disabled>
         </div>
-
         {{-- Dirección Fiscal --}}
         <div class="col-12">
-            <input type="text" id="ciudad" name="ciudad" class="form-control" placeholder="Dirección Fiscal *"
-                value="{{ $cliente->ciudad ?? '' }}" disabled>
+            <input type="text"
+                id="ciudad"
+                name="ciudad"
+                class="form-control"
+                placeholder="Dirección Fiscal *"
+                value="{{ $cliente->ciudad ?? '' }}"
+                disabled>
         </div>
 
         {{-- Departamento, Provincia y Distrito --}}
