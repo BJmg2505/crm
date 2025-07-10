@@ -6,15 +6,9 @@
 <x-sistema.card class="p-4 m-2 mb-2 mx-0">
     <div class="d-flex flex-row flex-wrap justify-between items-center mb-2">
         <x-sistema.titulo title="Datos Adicionales" />
-        @role('ejecutivo')
-            <div class="flex flex-row gap-2">
-                <button class="btn btn-primary" id="btn-editar-datos" onclick="editarDatosAdicionales()">Editar</button>
-                <button class="btn btn-primary d-none" id="btn-guardar-datos"
-                    onclick="guardarDatosAdicionales()">Guardar</button>
-                <button class="btn btn-secondary d-none" id="btn-cancelar-datos"
-                    onclick="cancelarDatosAdicionales()">Cancelar</button>
-            </div>
-        @endrole
+        <div class="flex flex-row gap-2">
+            {{ $botonHeader }}
+        </div>
     </div>
 
     <div class="row" id="form-datos-adicionales">
@@ -103,12 +97,15 @@
 
     function obtenerValoresFormulario() {
         return {
-            estadowick_id: $('#estadowick_id').val(),
-            linea_claro: $('#linea_claro').val(),
-            linea_entel: $('#linea_entel').val(),
-            linea_bitel: $('#linea_bitel').val(),
-            clientetipo_id: $('#clientetipo_id').val(),
-            ejecutivo_salesforce: $('#ejecutivo_salesforce').val(),
+            estadowick_id: $('#estadowick_id').val() ?? 1,
+            estadodito_id: $('#estadodito_id').val() ?? 1,
+            linea_claro: $('#linea_claro').val() ?? '0',
+            linea_entel: $('#linea_entel').val() ?? '0',
+            linea_bitel: $('#linea_bitel').val() ?? '0',
+            linea_movistar: $('#linea_movistar').val() ?? '0',
+            clientetipo_id: $('#clientetipo_id').val() ?? 1,
+            ejecutivo_salesforce: $('#ejecutivo_salesforce').val() ?? '',
+            agencia_id: $('#agencia_id').val() ?? 1,
         };
     }
 
@@ -130,28 +127,31 @@
             return;
         }
 
-        const cliente_id = $('#cliente_id').val();
+        const dialog = document.querySelector("#dialog");
+        dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
+            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element
+                .remove();
+        });
+        let cliente_id = $('#cliente_id').val();
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-
         $.ajax({
-            url: `/cliente-gestion/${cliente_id}`,
-            method: 'PUT',
+            url: `cliente-gestion/${cliente_id}`,
+            method: "PUT",
             data: {
-                view: 'update-datos-adicionales',
+                view: 'update-movistar',
                 ...data
             },
             success: function() {
                 $('#form-datos-adicionales :input').prop('disabled', true);
                 $('#btn-editar-datos').removeClass('d-none');
                 $('#btn-guardar-datos, #btn-cancelar-datos').addClass('d-none');
-                
             },
             error: function() {
-                alert('Ocurrió un error al guardar los datos.');
+                mostrarError(response);
             }
         });
     }

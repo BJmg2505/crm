@@ -82,7 +82,9 @@
                             </template>
                         </select>
                     </div>
-                    {{ $botonFooter }}
+                    <div class="col-12 text-end">
+                        {{ $botonFooter }}
+                    </div>
                 </div>
             </div>
         </div>

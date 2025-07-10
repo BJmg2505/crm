@@ -36,12 +36,30 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <x-sistema.titulo title="Datos Del Adicionales" />
                     <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-movistar', this)">
-                        <i class="fa fa-chevron-down"></i>
+                        <i class="fa fa-chevron-up"></i>
                     </button>
                 </div>
-                <div id="panel-movistar" style="display: none;">
+                <div id="panel-movistar" style="display: block;">
                     <x-sistema.cliente.movistars :$movistar>
-                        
+                        @role(['ejecutivo'])
+                            <x-slot:botonHeader>
+                                <button class="btn btn-primary"
+                                    id="btn-editar-datos"
+                                    onclick="editarDatosAdicionales()">
+                                    Editar
+                                </button>
+                                <button class="btn btn-primary d-none"
+                                    id="btn-guardar-datos"
+                                    onclick="guardarDatosAdicionales()">
+                                    Guardar
+                                </button>
+                                <button class="btn btn-secondary d-none"
+                                    id="btn-cancelar-datos"
+                                    onclick="cancelarDatosAdicionales()">
+                                    Cancelar
+                                </button>
+                            </x-slot>
+                        @endrole
                     </x-sistema.cliente.movistars>
                 </div>
             </div>
@@ -50,10 +68,10 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <x-sistema.titulo title="Agenda" />
                     <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-agenda', this)">
-                        <i class="fa fa-chevron-down"></i>
+                        <i class="fa fa-chevron-up"></i>
                     </button>
                 </div>
-                <div id="panel-agenda" style="display: none;">
+                <div id="panel-agenda" style="display: block;">
                     <x-sistema.notificacion.create :$notificacion>
                         @role('ejecutivo')
                             <x-slot:botonFooter>
@@ -69,10 +87,10 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <x-sistema.titulo title="Productos en Negociación" />
                     <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-ventas', this)">
-                        <i class="fa fa-chevron-down"></i>
+                        <i class="fa fa-chevron-up"></i>
                     </button>
                 </div>
-                <div id="panel-ventas" style="display: none;">
+                <div id="panel-ventas" style="display: block;">
                     <x-sistema.cliente.ventas />
                 </div>
             </div>
@@ -82,15 +100,23 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <x-sistema.titulo title="Contactos" />
                     <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-contactos', this)">
-                        <i class="fa fa-chevron-down"></i>
+                        <i class="fa fa-chevron-up"></i>
                     </button>
                 </div>
-                <div id="panel-contactos" style="display: none;">
+                <div id="panel-contactos" style="display: block;">
                     <x-sistema.cliente.contactos :$contactos>
                         @role('ejecutivo')
                             <x-slot:botonFooter>
-                                <button type="button" class="btn bg-primary text-white" onclick="saveContacto()"
-                                    id="btn_guardar_contacto">Guardar</button>
+                                <button type="button"
+                                    class="btn bg-primary text-white"
+                                    onclick="saveContacto()"
+                                    id="btn_guardar_contacto">
+                                    Guardar
+                                </button>
+                                <button type="button" class="btn bg-secondary text-white"
+                                    @click="resetFormContacto()">
+                                    Cancelar
+                                </button>
                             </x-slot>
                         @endrole
                     </x-sistema.cliente.contactos>
@@ -102,10 +128,10 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <x-sistema.titulo title="Sucursales" />
                     <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-sucursales', this)">
-                        <i class="fa fa-chevron-down"></i>
+                        <i class="fa fa-chevron-up"></i>
                     </button>
                 </div>
-                <div id="panel-sucursales" style="display: none;">
+                <div id="panel-sucursales" style="display: block;">
                     <x-sistema.cliente.sucursales :$sucursales>
                         @role('ejecutivo')
                             <x-slot:botonFooter>
@@ -209,83 +235,6 @@
             }
         });
     }
-
-    function saveContacto() {
-        const dialog = document.querySelector("#dialog");
-        dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
-            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element
-                .remove();
-        });
-        let cliente_id = $('#cliente_id').val();
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: `cliente-gestion/${cliente_id}`,
-            method: "PUT",
-            data: {
-                view: 'update-contacto',
-                contacto_id: $('#contacto_id').val(),
-                dni: $('#dni').val(),
-                nombre: $('#nombre').val(),
-                celular: $('#celular').val(),
-                cargo: $('#cargo').val(),
-                correo: $('#correo').val(),
-            },
-            success: function(result) {
-                $('#contacto_id').val('');
-                $('#nombre').val('');
-                $('#dni').val('');
-                $('#celular').val('');
-                $('#cargo').val('');
-                $('#correo').val('');
-                listContactos(result);
-            },
-            error: function(response) {
-                mostrarError(response);
-            }
-        });
-    }
-
-    function listContactos(contactos) {
-        let html = "";
-        contactos.forEach(function(contacto) {
-            html += `<tr id="${contacto.id}">
-                        <td class="align-middle text-uppercase text-sm">
-                            <span class="text-secondary text-xs font-weight-normal">${contacto.dni}</span>
-                        </td>
-                        <td class="align-middle text-uppercase text-sm">
-                            <span class="text-secondary text-xs font-weight-normal">${contacto.nombre}</span>
-                        </td>
-                        <td class="align-middle text-uppercase text-sm">
-                            <span class="text-secondary text-xs font-weight-normal">${contacto.celular}</span>
-                        </td>
-                        <td class="align-middle text-uppercase text-sm">
-                            <span class="text-secondary text-xs font-weight-normal">${contacto.cargo}</span>
-                        </td>
-                        <td class="align-middle text-uppercase text-sm">
-                            <span class="text-secondary text-xs font-weight-normal">${contacto.correo}</span>
-                        </td>
-                        <td class="align-middle text-center">
-                            <button class="btn btn-sm btn-primary" type="button"
-                                @click="editarContacto({ 
-                                    contacto_id: '${contacto.id}', 
-                                    dni: '${contacto.dni}', 
-                                    nombre: '${contacto.nombre}', 
-                                    celular: '${contacto.celular}', 
-                                    cargo: '${contacto.cargo}', 
-                                    correo: '${contacto.correo}' 
-                                })">
-                                Editar
-                            </button>
-                        </td>
-                    </tr>`;
-        })
-        $('#contactos').html(html);
-    }
-
     function saveComentario() {
         const dialog = document.querySelector("#dialog");
         dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {

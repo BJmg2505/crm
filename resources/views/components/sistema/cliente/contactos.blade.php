@@ -5,7 +5,7 @@
     'cliente' => null, // Asegúrate de pasar esta variable
 ])
 
-<x-sistema.card class="p-4 m-2 mb-2 mx-0" x-data="contactoForm({{ json_encode($contactos) }}, {{ $cliente->id ?? 'null' }})">
+<x-sistema.card class="p-4 m-2 mb-2 mx-0" x-data="contactoForm()">
     {{-- Título y botón --}}
     <div class="d-flex flex-row flex-wrap justify-between items-center mb-3">
         <x-sistema.titulo title="Contactos" />
@@ -22,10 +22,28 @@
                 select.form-control option:first-child { color: #e67e22; }
             </style>
 
-            <div class="col-md-4"><input type="text" class="form-control" placeholder="DNI*" x-model="form.dni"></div>
-            <div class="col-md-4"><input type="text" class="form-control" placeholder="Nombre*" x-model="form.nombre"></div>
+            <input class="form-control" type="hidden" id="contacto_id" name="contacto_id" x-model="form.contacto_id">
             <div class="col-md-4">
-                <select class="form-control" x-model="form.cargo">
+                <input type="text"
+                    name="dni"
+                    id="dni"
+                    class="form-control"
+                    placeholder="DNI*"
+                    x-model="form.dni">
+            </div>
+            <div class="col-md-4">
+                <input type="text"
+                    name="nombre"
+                    id="nombre"
+                    class="form-control"
+                    placeholder="Nombre*"
+                    x-model="form.nombre">
+            </div>
+            <div class="col-md-4">
+                <select class="form-control"
+                    name="cargo"
+                    id="cargo"
+                    x-model="form.cargo">
                     <option value="">Cargo*</option>
                     <option value="Gerente General">Gerente General</option>
                     <option value="Apoderado">Apoderado</option>
@@ -33,12 +51,24 @@
                     <option value="Empleado (a)">Empleado (a)</option>
                 </select>
             </div>
-            <div class="col-md-6"><input type="email" class="form-control" placeholder="Correo*" x-model="form.correo"></div>
-            <div class="col-md-6"><input type="text" class="form-control" placeholder="Celular*" x-model="form.celular"></div>
+            <div class="col-md-6">
+                <input type="email"
+                    name="correo"
+                    id="correo"
+                    class="form-control"
+                    placeholder="Correo*"
+                    x-model="form.correo">
+            </div>
+            <div class="col-md-6">
+                <input type="text"
+                    name="celular"
+                    id="celular"
+                    class="form-control"
+                    placeholder="Celular*"
+                    x-model="form.celular">
+            </div>
             <div class="col-12 text-end">
-                <button type="button" class="btn btn-primary" @click="guardarNuevoContacto()">
-                    <i class="fas fa-save me-1"></i> Guardar
-                </button>
+                {{ $botonFooter }}
             </div>
         </div>
     @endrole
@@ -56,120 +86,133 @@
                     <th style="color: #ff7700;">Acciones</th>
                 </tr>
             </thead>
-            <tbody class="text-sm">
-                <template x-for="(c, index) in lista" :key="c.id">
-                    <tr x-data="{
-                        editando: false,
-                        contacto: { ...c },
-                        original: {},
-                        editar() {
-                            this.original = JSON.parse(JSON.stringify(this.contacto));
-                            this.editando = true;
-                        },
-                        cancelar() {
-                            this.contacto = JSON.parse(JSON.stringify(this.original));
-                            this.editando = false;
-                        },
-                        guardar() {
-                            lista[index] = JSON.parse(JSON.stringify(this.contacto));
-                            this.editando = false;
-                        }
-                    }">
-                        <td class="text-center align-middle">
-                            <template x-if="editando">
-                                <input type="text" class="form-control form-control-sm text-center" x-model="contacto.dni">
-                            </template>
-                            <template x-if="!editando"><span x-text="contacto.dni"></span></template>
+            <tbody class="text-sm" id="contactos">
+                @if ($contactos)
+                    @foreach ($contactos as $contacto)
+                    <tr id="{{ $contacto['id'] }}">
+                        <td class="align-middle text-uppercase text-sm">
+                            <span class="text-secondary text-xs font-weight-normal">{{ $contacto['dni'] }}</span>
                         </td>
-                        <td class="text-center align-middle">
-                            <template x-if="editando">
-                                <input type="text" class="form-control form-control-sm text-center" x-model="contacto.nombre">
-                            </template>
-                            <template x-if="!editando"><span x-text="contacto.nombre"></span></template>
+                        <td class="align-middle text-uppercase text-sm">
+                            <span class="text-secondary text-xs font-weight-normal">{{ $contacto['nombre'] }}</span>
                         </td>
-                        <td class="text-center align-middle">
-                            <template x-if="editando">
-                                <input type="text" class="form-control form-control-sm text-center" x-model="contacto.celular">
-                            </template>
-                            <template x-if="!editando"><span x-text="contacto.celular"></span></template>
+                        <td class="align-middle text-uppercase text-sm">
+                            <span class="text-secondary text-xs font-weight-normal">{{ $contacto['celular'] }}</span>
                         </td>
-                        <td class="text-center align-middle">
-                            <template x-if="editando">
-                                <select class="form-control form-control-sm text-center" x-model="contacto.cargo">
-                                    <option value="Gerente General">Gerente General</option>
-                                    <option value="Apoderado">Apoderado</option>
-                                    <option value="Administrador (a)">Administrador (a)</option>
-                                    <option value="Empleado (a)">Empleado (a)</option>
-                                </select>
-                            </template>
-                            <template x-if="!editando"><span x-text="contacto.cargo"></span></template>
+                        <td class="align-middle text-uppercase text-sm">
+                            <span class="text-secondary text-xs font-weight-normal">{{ $contacto['cargo'] }}</span>
                         </td>
-                        <td class="text-center align-middle">
-                            <template x-if="editando">
-                                <input type="email" class="form-control form-control-sm text-center" x-model="contacto.correo">
-                            </template>
-                            <template x-if="!editando"><span x-text="contacto.correo"></span></template>
+                        <td class="align-middle text-uppercase text-sm">
+                            <span class="text-secondary text-xs font-weight-normal">{{ $contacto['correo'] }}</span>
                         </td>
-                        <td class="text-center align-middle">
-                            <template x-if="!editando">
-                                <i class="fas fa-edit text-primary cursor-pointer" @click="editar()" title="Editar"></i>
-                            </template>
-                            <template x-if="editando">
-                                <div class="d-flex gap-2 justify-content-center">
-                                    <i class="fas fa-save text-success cursor-pointer" @click="guardar()" title="Guardar"></i>
-                                    <i class="fas fa-times text-danger cursor-pointer" @click="cancelar()" title="Cancelar"></i>
-                                </div>
-                            </template>
+                        <td class="align-middle text-center">
+                            <button class="btn btn-sm btn-primary" type="button"
+                                @click="editarContacto({ 
+                                    contacto_id: '{{ $contacto['id'] }}', 
+                                    dni: '{{ $contacto['dni'] }}', 
+                                    nombre: '{{ $contacto['nombre'] }}', 
+                                    celular: '{{ $contacto['celular'] }}', 
+                                    cargo: '{{ $contacto['cargo'] }}', 
+                                    correo: '{{ $contacto['correo'] }}' 
+                                })">
+                                Editar
+                            </button>
                         </td>
                     </tr>
-                </template>
+                    @endforeach
+                @endif
             </tbody>
         </table>
     </div>
 </x-sistema.card>
-
-{{-- Alpine.js --}}
 <script>
-    function contactoForm(contactosIniciales, clienteId) {
-        return {
-            lista: (contactosIniciales ?? []).sort((a, b) => b.id - a.id),
-            form: {
-                dni: '', nombre: '', celular: '', cargo: '', correo: ''
-            },
-            guardarNuevoContacto() {
-                if (!this.form.dni || !this.form.nombre || !this.form.cargo || !this.form.correo || !this.form.celular) {
-                    alert('Todos los campos son obligatorios');
-                    return;
-                }
-
-                const payload = {
-                    cliente_id: clienteId,
-                    ...this.form
-                };
-
-                fetch('{{ route('contactos.store') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify(payload)
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error('Error al guardar contacto');
-                    return response.json();
-                })
-                .then(data => {
-                    this.lista.unshift(data); // respuesta real
-                    this.form = { dni: '', nombre: '', celular: '', cargo: '', correo: '' };
-                    setTimeout(() => {
-                        document.querySelector('input[placeholder="DNI*"]').focus();
-                    }, 100);
-                })
-                .catch(error => {
-                    alert('Error: ' + error.message);
-                });
+    function saveContacto() {
+        const dialog = document.querySelector("#dialog");
+        dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
+            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element
+                .remove();
+        });
+        let cliente_id = $('#cliente_id').val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-        }
+        });
+        $.ajax({
+            url: `cliente-gestion/${cliente_id}`,
+            method: "PUT",
+            data: {
+                view: 'update-contacto',
+                contacto_id: $('#contacto_id').val(),
+                dni: $('#dni').val(),
+                nombre: $('#nombre').val(),
+                celular: $('#celular').val(),
+                cargo: $('#cargo').val(),
+                correo: $('#correo').val(),
+            },
+            success: function(result) {
+                $('#contacto_id').val('');
+                $('#nombre').val('');
+                $('#dni').val('');
+                $('#celular').val('');
+                $('#cargo').val('');
+                $('#correo').val('');
+                listContactos(result);
+            },
+            error: function(response) {
+                mostrarError(response);
+            }
+        });
+    }
+    function listContactos(contactos) {
+        let html = "";
+        contactos.forEach(function(contacto) {
+            html += `<tr id="${contacto.id}">
+                        <td class="align-middle text-uppercase text-sm">
+                            <span class="text-secondary text-xs font-weight-normal">${contacto.dni}</span>
+                        </td>
+                        <td class="align-middle text-uppercase text-sm">
+                            <span class="text-secondary text-xs font-weight-normal">${contacto.nombre}</span>
+                        </td>
+                        <td class="align-middle text-uppercase text-sm">
+                            <span class="text-secondary text-xs font-weight-normal">${contacto.celular}</span>
+                        </td>
+                        <td class="align-middle text-uppercase text-sm">
+                            <span class="text-secondary text-xs font-weight-normal">${contacto.cargo}</span>
+                        </td>
+                        <td class="align-middle text-uppercase text-sm">
+                            <span class="text-secondary text-xs font-weight-normal">${contacto.correo}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <button class="btn btn-sm btn-primary" type="button"
+                                @click="editarContacto({ 
+                                    contacto_id: '${contacto.id}', 
+                                    dni: '${contacto.dni}', 
+                                    nombre: '${contacto.nombre}', 
+                                    celular: '${contacto.celular}', 
+                                    cargo: '${contacto.cargo}', 
+                                    correo: '${contacto.correo}' 
+                                })">
+                                Editar
+                            </button>
+                        </td>
+                    </tr>`;
+        })
+        $('#contactos').html(html);
+    }
+    function contactoForm() {
+        return {
+            form: {
+                contacto_id: null,
+                dni: '',
+                nombre: '',
+                celular: '',
+                cargo: '',
+                correo: '',
+            },
+            editarContacto(contacto) {
+                this.form = { ...contacto };
+            }
+        };
     }
 </script>
