@@ -30,11 +30,10 @@
                     @endrole
                 </x-sistema.cliente.datos>
             </div>
-
             {{-- DATOS ADICIONALES --}}
             <div class="p-2 mb-0">
                 <div class="d-flex justify-content-between align-items-center">
-                    <x-sistema.titulo title="Datos Del Adicionales" />
+                    <x-sistema.titulo title="Datos Adicionales" />
                     <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-movistar', this)">
                         <i class="fa fa-chevron-up"></i>
                     </button>
@@ -63,38 +62,6 @@
                     </x-sistema.cliente.movistars>
                 </div>
             </div>
-            {{-- AGENDA --}}
-            <div class="p-2 mb-0">
-                <div class="d-flex justify-content-between align-items-center">
-                    <x-sistema.titulo title="Agenda" />
-                    <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-agenda', this)">
-                        <i class="fa fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div id="panel-agenda" style="display: none;">
-                    <x-sistema.notificacion.create :$notificacion>
-                        @role('ejecutivo')
-                            <x-slot:botonFooter>
-                                <button type="button" class="btn bg-primary text-white"
-                                    onclick="saveNotificacion()">Agregar</button>
-                            </x-slot>
-                        @endrole
-                    </x-sistema.notificacion.create>
-                </div>
-            </div>
-            {{-- PRODUCTOS EN NEGOCIACIÓN --}}
-            <div class="p-2 mb-0">
-                <div class="d-flex justify-content-between align-items-center">
-                    <x-sistema.titulo title="Productos en Negociación" />
-                    <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-ventas', this)">
-                        <i class="fa fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div id="panel-ventas" style="display: none;">
-                    <x-sistema.cliente.ventas />
-                </div>
-            </div>
-
             {{-- CONTACTOS --}}
             <div class="p-2 mb-0">
                 <div class="d-flex justify-content-between align-items-center">
@@ -122,7 +89,6 @@
                     </x-sistema.cliente.contactos>
                 </div>
             </div>
-
             {{-- SUCURSALES --}}
             <div class="p-2 mb-0">
                 <div class="d-flex justify-content-between align-items-center">
@@ -149,12 +115,41 @@
                     </x-sistema.cliente.sucursales>
                 </div>
             </div>
+            {{-- PRODUCTOS EN NEGOCIACIÓN --}}
+            <div class="p-2 mb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <x-sistema.titulo title="Productos en Negociación" />
+                    <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-ventas', this)">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div id="panel-ventas" style="display: none;">
+                    <x-sistema.cliente.ventas />
+                </div>
+            </div>
+            {{-- AGENDA --}}
+            <div class="p-2 mb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <x-sistema.titulo title="Agenda" />
+                    <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-agenda', this)">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div id="panel-agenda" style="display: none;">
+                    <x-sistema.notificacion.create :$notificacion>
+                        @role('ejecutivo')
+                            <x-slot:botonFooter>
+                                <button type="button" class="btn bg-primary text-white"
+                                    onclick="guardarNotificacion()">Agregar</button>
+                            </x-slot>
+                        @endrole
+                    </x-sistema.notificacion.create>
+                </div>
+            </div>
         </div>
 
         {{-- COLUMNA LATERAL: 4 columnas --}}
         <div class="m-0 p-2 col-md-4">
-
-
             {{-- ETAPA --}}
             <div class="p-0 mb-1">
                 <x-sistema.cliente.etapas>
@@ -168,7 +163,6 @@
                     @endrole
                 </x-sistema.cliente.etapas>
             </div>
-
             {{-- COMENTARIOS --}}
             <div class="p-0 mb-1">
                 <x-sistema.cliente.comentarios :$comentarios>
@@ -288,56 +282,6 @@
         })
         $('#comentarios').html(html);
     }
-
-    function saveNotificacion() {
-        let cliente_id = $('#cliente_id').val();
-        const dialog = document.querySelector("#dialog");
-        dialog.querySelectorAll('.is-invalid, .invalid-feedback').forEach(element => {
-            element.classList.contains('is-invalid') ? element.classList.remove('is-invalid') : element
-                .remove();
-        });
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: `notificacion`,
-            method: "POST",
-            data: {
-                view: 'store_from_fichacliente',
-                notificaciontipo_id: $('#notificaciontipo_id').val(),
-                mensaje: $('#mensaje').val(),
-                fecha: $('#fecha').val(),
-                hora: $('#hora').val(),
-                cliente_id: cliente_id,
-            },
-            success: function(result) {
-                $('#mensaje, #fecha, #hora').val('');
-                listNotificacion(result);
-            },
-            error: function(response) {
-                mostrarError(response);
-            }
-        });
-    }
-
-    function listNotificacion(notificacions) {
-        let html = "";
-        notificacions.forEach(function(notificacion) {
-            html += `<div class="mb-4" id="${notificacion.id}">
-                        <span class="text-slate-900 text-base font-semibold">${notificacion.asunto}</span>
-                        <div class="text-end">
-                            <span class="text-slate-500 text-sm">
-                                <i class="text-blue-400 fa-solid fa-calendar-days"></i> ${notificacion.fecha} ${notificacion.hora}
-                            </span>
-                        </div>
-                    </div>
-                    <hr>`;
-        })
-        $('#notificacions').html(html);
-    }
-
     function editMovistar() {
         $('#estadowick_id, #estadodito_id, #linea_claro, #linea_entel, #linea_bitel, #linea_movistar, #clientetipo_id, #ejecutivo_salesforce, #agencia_id, #btn_guardar_movistar')
             .prop('disabled', false)

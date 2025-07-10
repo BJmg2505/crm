@@ -11,7 +11,6 @@
             {{ $botonHeader }}
         </div>
     </div>
-
     {{-- Formulario de nueva notificación --}}
     <div class="row gx-3 gy-2 align-items-end mb-3">
         <div class="col-md-6">
@@ -50,12 +49,11 @@
                     id="notificacion-{{ $item->id }}">
                     {{-- Mensaje --}}
                     <div class="text-muted" style="font-size: 0.95rem; margin-top: 2px; white-space: pre-line;">
-    {{ trim($item->mensaje) }}
-</div>
+                        {{ trim($item->mensaje) }}
+                    </div>
                     {{-- Cabecera: Asunto a la izquierda / Usuario + Fecha-Hora a la derecha --}}
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <div class="fw-semibold text-orange-600 fs-6">{{ $item->asunto }}</div>
-
                         <div class="d-flex gap-3 text-sm text-orange-600">
                             <div class="d-flex align-items-center gap-1">
                                 <i class="fa-solid fa-user text-orange-500"></i>
@@ -72,7 +70,6 @@
                     </div>
                 </div>
             @endforeach
-
             {{-- Botón Ver Más/Ver Menos --}}
             @if (count($notificacion) > 2)
                 <div class="text-center mt-3">
@@ -100,44 +97,65 @@
             ? 'Ver menos <i class="fa-solid fa-chevron-up"></i>'
             : 'Ver más <i class="fa-solid fa-chevron-down"></i>';
     }
-
     function guardarNotificacion() {
-        const cliente_id = $('#cliente_id').val(); // Asegúrate de tener este ID en tu formulario
+        const cliente_id = $('#cliente_id').val();
         const data = {
             notificaciontipo_id: $('#notificaciontipo_id').val(),
             fecha: $('#fecha').val(),
             hora: $('#hora').val(),
             mensaje: $('#mensaje').val(),
+            cliente_id: cliente_id
         };
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-
-        $.post(`/cliente-gestion/${cliente_id}`, {
-            ...data,
-            view: 'store-notificacion'
-        })
-        .done(() => {
-            $('#mensaje').val('');
-            actualizarListaNotificaciones();
-        })
-        .fail(() => {
-            alert('Error al guardar la notificación.');
+        $.ajax({
+            url: `notificacion`,
+            method: "POST",
+            data: {
+                view: 'store_from_fichacliente',
+                ...data
+            },
+            success: function(result) {
+                $('#mensaje, #fecha, #hora').val('');
+                actualizarListaNotificaciones(result);
+            },
+            error: function(response) {
+                mostrarError(response);
+            }
         });
     }
-
-    function actualizarListaNotificaciones() {
+    function actualizarListaNotificaciones(notificacions) {
         const cliente_id = $('#cliente_id').val();
-
-        $.get(`/cliente-gestion/${cliente_id}`, {
-            view: 'get-notificaciones'
-        }, function (html) {
-            $('#notificaciones-lista-container').html(html);
-            notificacionesExpandido = false; // reinicia estado
-        });
+        let html = "";
+        notificacions.forEach(function(notificacion) {
+            html += `<div class="notificacion-item p-3 mb-1 border rounded shadow-sm bg-white"
+                    id="notificacion-${notificacion.id}">
+                    <div class="text-muted" style="font-size: 0.95rem; margin-top: 2px; white-space: pre-line;">
+                        ${notificacion.mensaje}
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="fw-semibold text-orange-600 fs-6">${notificacion.asunto}</div>
+                        <div class="d-flex gap-3 text-sm text-orange-600">
+                            <div class="d-flex align-items-center gap-1">
+                                <i class="fa-solid fa-user text-orange-500"></i>
+                                <span>${notificacion.username}</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-1">
+                                <i class="fa-solid fa-calendar-days text-orange-500"></i>
+                                <span>
+                                    ${notificacion.fecha}
+                                    ${notificacion.hora}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+        })
+        $('#notificaciones-lista').html(html);
+        notificacionesExpandido = false;
     }
 </script>
 

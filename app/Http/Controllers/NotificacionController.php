@@ -154,14 +154,16 @@ class NotificacionController extends Controller
             $notificacion->user_id = auth()->user()->id;
             $notificacion->cliente_id = request('cliente_id');
             $notificacion->save();
-            $data_notificacions = $cliente->notificacions()->orderBy('notificacions.id', 'desc')->limit(2)->get();
+            $data_notificacions = $cliente->notificacions()->orderBy('notificacions.id', 'desc')->limit(4)->get();
             $notificacions = [];
             foreach ($data_notificacions as $value) {
                 $notificacions[] = [
                     'id' => $value->id,
                     'asunto' => $value->asunto,
+                    'mensaje' => trim($value->mensaje),
                     'fecha' => now()->parse($value->fecha)->format('d-m-Y'),
                     'hora' => now()->parse($value->hora)->format(' h:i:s A'),
+                    'username' => $value->user->name,
                 ];
             }
 

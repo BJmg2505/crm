@@ -9,7 +9,6 @@
             <div class="mb-1">
                 <x-sistema.cliente.datos />
             </div>
-
             {{-- DATOS ADICIONALES --}}
             <div class="p-2 mb-0">
                 <div class="d-flex justify-content-between align-items-center">
@@ -22,20 +21,6 @@
                     <x-sistema.cliente.movistars />
                 </div>
             </div>
-
-            {{-- PRODUCTOS EN NEGOCIACIÓN --}}
-            <div class="p-2 mb-0">
-                <div class="d-flex justify-content-between align-items-center">
-                    <x-sistema.titulo title="Productos en Negociación" />
-                    <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-ventas', this)">
-                        <i class="fa fa-chevron-down"></i>
-                    </button>
-                </div>
-                <div id="panel-ventas" style="display: none;">
-                    <x-sistema.cliente.ventas />
-                </div>
-            </div>
-
             {{-- CONTACTOS --}}
             <div class="p-2 mb-0">
                 <div class="d-flex justify-content-between align-items-center">
@@ -48,7 +33,6 @@
                     <x-sistema.cliente.contactos />
                 </div>
             </div>
-
             {{-- SUCURSALES --}}
             <div class="p-2 mb-0">
                 <div class="d-flex justify-content-between align-items-center">
@@ -61,15 +45,25 @@
                     <x-sistema.cliente.sucursales />
                 </div>
             </div>
+            {{-- PRODUCTOS EN NEGOCIACIÓN --}}
+            <div class="p-2 mb-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <x-sistema.titulo title="Productos en Negociación" />
+                    <button class="btn btn-sm btn-primary" onclick="toggleSeccion('panel-ventas', this)">
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                </div>
+                <div id="panel-ventas" style="display: none;">
+                    <x-sistema.cliente.ventas />
+                </div>
+            </div>
         </div>
-
         {{-- COLUMNA LATERAL: 4 columnas --}}
         <div class="m-0 p-1 col-md-4">
             {{-- ETAPA --}}
             <div class="p-0 mb-1">
                 <x-sistema.cliente.etapas />
             </div>
-
             {{-- COMENTARIOS --}}
             <div class="p-0 mb-1">
                 <x-sistema.cliente.comentarios />

@@ -213,7 +213,7 @@ class ClienteService
                 'detalle' => $value->detalle,
             ];
         }
-        $data_notificacions = $cliente->notificacions()->orderBy('notificacions.id', 'desc')->limit(2)->get();
+        $data_notificacions = $cliente->notificacions()->orderBy('notificacions.id', 'desc')->limit(4)->get();
         $notificacions = $data_notificacions != '[]' ? $data_notificacions : false;
         $data = [
             'cliente' => $cliente,

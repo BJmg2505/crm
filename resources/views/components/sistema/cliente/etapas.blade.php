@@ -18,7 +18,7 @@
             <label for="etapa_id" class="form-label mb-0 me-2 fw-bold">Etapa:</label>
         </div>
         <div class="col-auto">
-            <select class="form-select form-select-sm w-auto" id="etapa_id">
+            <select class="form-select form-select-sm w-auto" id="etapa_id" disabled>
                 @foreach ($etapas as $value)
                     <option value="{{ $value->id }}">{{ $value->nombre }}</option>
                 @endforeach
