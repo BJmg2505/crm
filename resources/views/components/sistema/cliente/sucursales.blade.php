@@ -252,6 +252,9 @@
                                 <td class="align-middle text-uppercase text-sm">
                                     <span class="text-secondary text-xs font-weight-normal">${sucursal.facilidad_tecnica ? 'SI' : 'NO'}</span>
                                 </td>
+                                <td class="align-middle text-uppercase text-sm">
+                                    <span class="text-secondary text-xs font-weight-normal">${sucursal.ubigeo}</span>
+                                </td>
                                 <td class="align-middle text-center">
                                     <button class="btn btn-sm btn-primary" type="button"
                                         @click="editarSucursal({

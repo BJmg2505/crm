@@ -355,11 +355,11 @@ class ClienteService
         $comentario->save();
         // Movistar
         $movistar = new Movistar;
-        $movistar->linea_claro = request('linea_claro');
-        $movistar->linea_entel = request('linea_entel');
-        $movistar->linea_bitel = request('linea_bitel');
-        $movistar->linea_movistar = request('linea_movistar');
-        $movistar->estadowick_id = request('estadowick_id');
+        $movistar->linea_claro = request('linea_claro') ?? '';
+        $movistar->linea_entel = request('linea_entel') ?? '';
+        $movistar->linea_bitel = request('linea_bitel') ?? '';
+        $movistar->linea_movistar = request('linea_movistar') ?? '';
+        $movistar->estadowick_id = request('estadowick_id') ?? 0;
         $movistar->estadodito_id = request('estadodito_id');
         $movistar->clientetipo_id = request('clientetipo_id');
         $movistar->ejecutivo_salesforce = request('ejecutivo_salesforce') ?? '';

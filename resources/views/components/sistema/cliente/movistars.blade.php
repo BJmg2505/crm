@@ -65,13 +65,18 @@
             </div>
         @endif
 
-        @if ($config['datosAdicionales']['ejecutivoSalesforce'])
-            <div class="col-md-4 mb-3">
-                <label for="ejecutivo_salesforce">Dealer CRM</label>
-                <input class="form-control" type="text" id="ejecutivo_salesforce" name="ejecutivo_salesforce"
-                    value="{{ $movistar->ejecutivo_salesforce ?? '' }}" disabled>
-            </div>
-        @endif
+        <div class="col-md-4 mb-3">
+            <label for="agencia_id">Estado Cliente</label>
+            <select class="form-control" id="agencia_id" disabled>
+                <option value="">Seleccione...</option>
+                @foreach ($agencias as $value)
+                    <option value="{{ $value->id }}"
+                        {{ $movistar && $movistar->agencia_id == $value->id ? 'selected' : '' }}>
+                        {{ $value->nombre }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
     </div>
 
     {{ $botonFooter }}

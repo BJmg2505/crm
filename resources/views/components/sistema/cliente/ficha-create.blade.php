@@ -131,7 +131,7 @@
                 sucursal_distrito_codigo: $('#sucursal_distrito_codigo').val(),
                 // comentario
                 comentario: $('#comentario').val(),
-                // movisar
+                // movistar
                 estadowick_id: $('#estadowick_id').val() ?? 1,
                 estadodito_id: $('#estadodito_id').val() ?? 1,
                 linea_claro: $('#linea_claro').val() ?? '0',
