@@ -96,7 +96,7 @@
         let dataCargo = [];
         $.each($('#producto_table tbody tr'), function(index, tr) {
             dataCargo.push({
-                producto_id: $('#producto_id' + tr.id).val(),
+                producto_id: $('# ' + tr.id).val(),
                 producto_nombre: $('#producto_nombre' + tr.id).val(),
                 detalle: $('#detalle' + tr.id).val(),
                 cantidad: $('#cantidad' + tr.id).val(),
@@ -132,7 +132,7 @@
                 // comentario
                 comentario: $('#comentario').val(),
                 // movistar
-                estadowick_id: $('#estadowick_id').val() ?? 1,
+                estadowick_id: $('#estadowick_id').val() ?? null,
                 estadodito_id: $('#estadodito_id').val() ?? 1,
                 linea_claro: $('#linea_claro').val() ?? 0,
                 linea_entel: $('#linea_entel').val() ?? 0,
@@ -166,6 +166,6 @@
     // Funcion para limpiar el disabled de los inputs
     $(document).ready(function () {
         $('#form-datos-cliente :input').prop('disabled', false);
-        $('#form-datos-adicionales :input').prop('disabled', false);
+        $('#form-datos-adicionales :input').not('#linea_claro').prop('disabled', false);
     });
 </script>

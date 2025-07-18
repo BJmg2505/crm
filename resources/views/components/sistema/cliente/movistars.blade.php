@@ -88,7 +88,7 @@
 
     function editarDatosAdicionales() {
         datosOriginales = obtenerValoresFormulario();
-        $('#form-datos-adicionales :input').prop('disabled', false);
+        $('#form-datos-adicionales :input').not('#linea_claro').prop('disabled', false);
         $('#btn-editar-datos').addClass('d-none');
         $('#btn-guardar-datos, #btn-cancelar-datos').removeClass('d-none');
     }
@@ -168,5 +168,23 @@
         } else {
             $('#estadodito_id').val(1).prop('disabled', false);
         }
+    });
+    $(document).ready(function () {
+        function toggleLineaClaro() {
+            const selected = $('#estadowick_id').val();
+            if (selected) {
+                $('#linea_claro').prop('disabled', false);
+            } else {
+                $('#linea_claro').prop('disabled', true);
+            }
+        }
+
+        // Llamamos al cargar la página por si ya viene preseleccionado
+        toggleLineaClaro();
+
+        // Escuchar cambios en el select
+        $('#estadowick_id').on('change', function () {
+            toggleLineaClaro();
+        });
     });
 </script>
