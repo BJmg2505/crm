@@ -186,5 +186,23 @@
         $('#estadowick_id').on('change', function () {
             toggleLineaClaro();
         });
+
+        
+        $('#clientetipo_id').on('change', function() {
+            const clientetipoId = $(this).val();
+    
+            let agenciaId = ''; // Default: libre (vacío)
+    
+            if (clientetipoId == 1) {
+                agenciaId = 1;
+            } else if (clientetipoId == 3 || clientetipoId == 4) {
+                agenciaId = 2;
+            }
+    
+            $('#agencia_id').val(agenciaId);
+        });
+    
+        // Opcional: ejecutar una vez al cargar la página si ya hay un valor seleccionado
+        $('#clientetipo_id').trigger('change');
     });
 </script>
