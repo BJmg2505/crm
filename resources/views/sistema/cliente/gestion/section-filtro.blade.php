@@ -149,13 +149,15 @@
                                     @if ($config['excel']['indotech'])
                                         <a href="javascript:;" class="btn bg-gradient-primary m-0" onclick="exportCliente()"
                                             type="button">Descargar</a>
+                                        {{-- <a href="javascript:;" class="btn bg-gradient-primary m-0"
+                                            onclick="exportFunnel('indotech')" type="button">Funnel Win360</a> --}}
                                         <a href="javascript:;" class="btn bg-gradient-primary m-0"
-                                            onclick="exportFunnel('indotech')" type="button">Funnel Indotech</a>
+                                            onclick="exportFunnel('secodi')" type="button">Funnel Win360aa</a>
                                     @endif
-                                    @if ($config['excel']['secodi'])
+                                    {{-- @if ($config['excel']['secodi'])
                                         <a href="javascript:;" class="btn bg-gradient-primary m-0"
                                             onclick="exportFunnel('secodi')" type="button">Funnel Secodi</a>
-                                    @endif
+                                    @endif --}}
                                 @endcan
                             </div>
                             <div class="form-group">

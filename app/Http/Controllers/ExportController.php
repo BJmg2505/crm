@@ -11,7 +11,7 @@ class ExportController extends Controller
     {
         $filtro = request('filtro');
         $user = auth()->user();
-        $nameExport = 'Secodi.xlsx';
+        $nameExport = 'FunelWin360.xlsx';
 
         return (new SecodiFunnelExport($filtro, $user))->download($nameExport);
     }

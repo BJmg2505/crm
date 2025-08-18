@@ -238,29 +238,33 @@
                 window.location.href = "/clientes/export?filtro=" + filtro;
             }
 
+            // function exportFunnel(empresa) {
+            //     let filtro = $('#data_filtro').val();
+
+            //     $.ajax({
+            //         url: `/export/${empresa}/funnel?filtro=${filtro}`,
+            //         method: "GET",
+            //         xhrFields: {
+            //             responseType: 'blob' // Indicar que la respuesta es un archivo binario
+            //         },
+            //         success: function(data) {
+            //             // Crear un enlace temporal para descargar el archivo
+            //             let blob = new Blob([data], {
+            //                 type: 'text/csv'
+            //             });
+            //             let link = document.createElement('a');
+            //             link.href = window.URL.createObjectURL(blob);
+            //             link.download = 'IndotechFunnelExport.csv';
+            //             link.click();
+            //         },
+            //         error: function(response) {
+            //             console.log('Error al descargar el archivo');
+            //         }
+            //     });
+            // }
             function exportFunnel(empresa) {
                 let filtro = $('#data_filtro').val();
-
-                $.ajax({
-                    url: `/export/${empresa}/funnel?filtro=${filtro}`,
-                    method: "GET",
-                    xhrFields: {
-                        responseType: 'blob' // Indicar que la respuesta es un archivo binario
-                    },
-                    success: function(data) {
-                        // Crear un enlace temporal para descargar el archivo
-                        let blob = new Blob([data], {
-                            type: 'text/csv'
-                        });
-                        let link = document.createElement('a');
-                        link.href = window.URL.createObjectURL(blob);
-                        link.download = 'IndotechFunnelExport.csv';
-                        link.click();
-                    },
-                    error: function(response) {
-                        console.log('Error al descargar el archivo');
-                    }
-                });
+                window.location.href = `/export/${empresa}/funnel?filtro=${filtro}`;
             }
         </script>
     @endsection
