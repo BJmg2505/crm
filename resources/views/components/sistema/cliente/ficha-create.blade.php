@@ -139,6 +139,8 @@
                 linea_entel: $('#linea_entel').val() ?? 0,
                 linea_bitel: $('#linea_bitel').val() ?? 0,
                 linea_movistar: $('#linea_movistar').val() ?? 0,
+                cantidad_lineas: $('#cantidad_lineas').val() ?? 0,
+                cargo_fijo: $('#cargo_fijo').val() ?? 0,
                 clientetipo_id: $('#clientetipo_id').val() ?? 1,
                 ejecutivo_salesforce: $('#ejecutivo_salesforce').val() ?? '',
                 agencia_id: $('#agencia_id').val() ?? 1,

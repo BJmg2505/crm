@@ -360,6 +360,8 @@ class ClienteService
         $movistar->linea_entel = request('linea_entel') ?? 0;
         $movistar->linea_bitel = request('linea_bitel') ?? 0;
         $movistar->linea_movistar = request('linea_movistar') ?? 0;
+        $movistar->cantidad_lineas = request('cantidad_lineas') ?? 0;
+        $movistar->cargo_fijo = request('cargo_fijo') ?? 0;
         $movistar->estadowick_id = request('estadowick_id') ?? null;
         $movistar->estadodito_id = request('estadodito_id') ?? 1;
         $movistar->clientetipo_id = request('clientetipo_id') ?? 1;
