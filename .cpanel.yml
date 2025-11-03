@@ -1,6 +1,6 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/xdsdw07tvnp4/entel-atencionempresas.com/
+    - export DEPLOYPATH=/home/xdsdw07tvnp4/interconect-servicios.com/
     - /usr/bin/rsync -av --exclude='index.php' public/ $DEPLOYPATH/
     - cp deploy/index.cpanel.php $DEPLOYPATH/index.php
