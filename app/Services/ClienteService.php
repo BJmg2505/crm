@@ -303,8 +303,13 @@ class ClienteService
         $user = auth()->user();
         // Ciente
         $cliente = new Cliente;
-        $cliente->ruc = request('ruc');
-        $cliente->razon_social = request('razon_social');
+        $cliente->ruc = request('ruc') ?? '';
+        $cliente->razon_social = request('razon_social') ?? '';
+        $cliente->dni_cliente = request('dni_cliente');
+        $cliente->nombre_cliente = request('nombre_cliente');
+        $cliente->apellido_paterno_cliente = request('apellido_paterno_cliente');
+        $cliente->apellido_materno_cliente = request('apellido_materno_cliente');
+        $cliente->tipo_documento = request('tipo_documento');
         $cliente->ciudad = request('ciudad');
         $cliente->fecha_gestion = now();
         $cliente->fecha_nuevo = now();

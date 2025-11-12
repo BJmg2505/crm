@@ -420,29 +420,69 @@ class ClienteGestionController extends Controller
         $cliente = Cliente::find($id);
         if ($view === 'update-cliente') {
             $request->validate(
+                array_merge(
+                    [
+                        'tipo_documento' => 'required|in:dni,ruc',
+                        'ciudad' => 'required|bail',
+                        'departamento_codigo' => 'required',
+                        'provincia_codigo' => 'required',
+                        'distrito_codigo' => 'required',
+                    ],
+                    $request->tipo_documento === 'ruc'
+                        ? [
+                            'ruc' => [
+                                'required',
+                                'numeric',
+                                'digits:11',
+                                'starts_with:20,10',
+                                'unique:clientes,ruc,' . $id,
+                            ],
+                            'razon_social' => 'required|string|bail',
+                        ]
+                        : [
+                            'dni_cliente' => [
+                                'required',
+                                'numeric',
+                                'digits:8',
+                                'unique:clientes,dni_cliente,' . $id,
+                            ],
+                            'nombre_cliente' => 'required|string|bail',
+                            'apellido_paterno_cliente' => 'required|string|bail',
+                            'apellido_materno_cliente' => 'required|string|bail',
+                        ]
+                ),
                 [
-                    'ruc' => 'required|numeric|digits:11|starts_with:20,10|unique:clientes,ruc,' . $id . '|bail',
-                    'razon_social' => 'required|bail',
-                    'ciudad' => 'required|bail',
-                    'departamento_codigo' => 'required',
-                    'provincia_codigo' => 'required',
-                    'distrito_codigo' => 'required',
-                ],
-                [
-                    'ruc.required' => 'El "Ruc" es obligatorio.',
-                    'ruc.numeric' => 'El "Ruc" debe ser numérico.',
-                    'ruc.digits' => 'El "Ruc" debe tener exactamente 11 dígitos.',
-                    'ruc.starts_with' => 'El "Ruc" debe iniciar con 20 o 10.',
-                    'ruc.unique' => 'El "Ruc" ya se encuentra registrado.',
-                    'razon_social.required' => 'La "Razón Social" es obligatorio.',
-                    'ciudad.required' => 'La "Ciudad" es obligatorio.',
+                    'tipo_documento.required' => 'Debe seleccionar el tipo de documento.',
+                    'tipo_documento.in' => 'El tipo de documento debe ser DNI o RUC.',
+
+                    'ruc.required' => 'El "RUC" es obligatorio.',
+                    'ruc.numeric' => 'El "RUC" debe ser numérico.',
+                    'ruc.digits' => 'El "RUC" debe tener exactamente 11 dígitos.',
+                    'ruc.starts_with' => 'El "RUC" debe iniciar con 20 o 10.',
+                    'ruc.unique' => 'El "RUC" ya se encuentra registrado.',
+                    'razon_social.required' => 'La "Razón Social" es obligatoria.',
+
+                    'dni_cliente.required' => 'El "DNI" es obligatorio.',
+                    'dni_cliente.numeric' => 'El "DNI" debe ser numérico.',
+                    'dni_cliente.digits' => 'El "DNI" debe tener exactamente 8 dígitos.',
+                    'dni_cliente.unique' => 'El "DNI" ya se encuentra registrado.',
+                    'nombre_cliente.required' => 'El "Nombre" es obligatorio.',
+                    'apellido_paterno_cliente.required' => 'El "Apellido Paterno" es obligatorio.',
+                    'apellido_materno_cliente.required' => 'El "Apellido Materno" es obligatorio.',
+
+                    'ciudad.required' => 'La "Ciudad" es obligatoria.',
                     'departamento_codigo.required' => 'El "Departamento" es obligatorio.',
                     'provincia_codigo.required' => 'La "Provincia" es obligatoria.',
                     'distrito_codigo.required' => 'El "Distrito" es obligatorio.',
                 ]
             );
-            $cliente->ruc = request('ruc');
-            $cliente->razon_social = request('razon_social');
+            $cliente->tipo_documento = request('tipo_documento');
+            $cliente->ruc = request('ruc') ?? '';
+            $cliente->razon_social = request('razon_social') ?? '';
+            $cliente->dni_cliente = request('dni_cliente');
+            $cliente->nombre_cliente = request('nombre_cliente');
+            $cliente->apellido_paterno_cliente = request('apellido_paterno_cliente');
+            $cliente->apellido_materno_cliente = request('apellido_materno_cliente');
             $cliente->ciudad = request('ciudad');
             $cliente->departamento_codigo = request('departamento_codigo');
             $cliente->provincia_codigo = request('provincia_codigo');

@@ -19,26 +19,75 @@
     </div>
 
     <div class="row g-3" id="form-datos-cliente">
-        {{-- RUC y Razón Social --}}
-        <div class="col-md-4">
-            <input type="text"
-                id="ruc"
-                name="ruc"
-                maxlength="11"
-                class="form-control"
-                placeholder="RUC *"
-                value="{{ $cliente->ruc ?? '' }}"
-                onchange="validarRuc(this)"
-                disabled>
+        <div class="col-md-3">
+            <select id="tipo_documento" name="tipo_documento" class="form-select" onchange="mostrarCampos()" disabled>
+                <option value="">-- Tipo de documento --</option>
+                <option value="dni" {{ old('tipo_documento', $cliente->tipo_documento ?? '') == 'dni' ? 'selected' : '' }}>DNI</option>
+                <option value="ruc" {{ old('tipo_documento', $cliente->tipo_documento ?? '') == 'ruc' ? 'selected' : '' }}>RUC</option>
+            </select>
         </div>
-        <div class="col-md-8">
-            <input type="text"
-                id="razon_social"
-                name="razon_social"
-                class="form-control"
-                placeholder="Razón Social *"
-                value="{{ $cliente->razon_social ?? '' }}"
-                disabled>
+        {{-- RUC y Razón Social --}}
+        <div class="col-12 row g-3" id="campos-ruc" style="display: none;">
+            <div class="col-md-4">
+                <input type="text"
+                    id="ruc"
+                    name="ruc"
+                    maxlength="11"
+                    class="form-control"
+                    placeholder="RUC *"
+                    value="{{ $cliente->ruc ?? '' }}"
+                    onchange="validarRuc(this)"
+                    disabled>
+            </div>
+            <div class="col-md-8">
+                <input type="text"
+                    id="razon_social"
+                    name="razon_social"
+                    class="form-control"
+                    placeholder="Razón Social *"
+                    value="{{ $cliente->razon_social ?? '' }}"
+                    disabled>
+            </div>
+        </div>
+        {{-- DNI --}}
+        <div class="col-12 row g-3" id="campos-dni" style="display: none;">
+            <div class="col-md-3">
+                <input type="text"
+                    id="dni_cliente"
+                    name="dni_cliente"
+                    maxlength="8"
+                    class="form-control"
+                    placeholder="DNI *"
+                    value="{{ $cliente->dni_cliente ?? '' }}"
+                    disabled>
+            </div>
+            <div class="col-md-3">
+                <input type="text"
+                    id="nombre_cliente"
+                    name="nombre_cliente"
+                    class="form-control"
+                    placeholder="Nombres *"
+                    value="{{ $cliente->nombre_cliente ?? '' }}"
+                    disabled>
+            </div>
+            <div class="col-md-3">
+                <input type="text"
+                    id="apellido_paterno_cliente"
+                    name="apellido_paterno_cliente"
+                    class="form-control"
+                    placeholder="Apellido Paterno *"
+                    value="{{ $cliente->apellido_paterno_cliente ?? '' }}"
+                    disabled>
+            </div>
+            <div class="col-md-3">
+                <input type="text"
+                    id="apellido_materno_cliente"
+                    name="apellido_materno_cliente"
+                    class="form-control"
+                    placeholder="Apellido Materno"
+                    value="{{ $cliente->apellido_materno_cliente ?? '' }}"
+                    disabled>
+            </div>
         </div>
         {{-- Dirección Fiscal --}}
         <div class="col-12">
@@ -111,8 +160,13 @@
 
     function obtenerValoresCliente() {
         return {
+            tipo_documento: $('#tipo_documento').val(),
             ruc: $('#ruc').val(),
             razon_social: $('#razon_social').val(),
+            dni_cliente: $('#dni_cliente').val(),
+            nombre_cliente: $('#nombre_cliente').val(),
+            apellido_paterno_cliente: $('#apellido_paterno_cliente').val(),
+            apellido_materno_cliente: $('#apellido_materno_cliente').val(),
             ciudad: $('#ciudad').val(),
             departamento_codigo: $('#departamento_codigo').val(),
             provincia_codigo: $('#provincia_codigo').val(),
@@ -121,8 +175,16 @@
     }
 
     function establecerValoresCliente(data) {
+        $('#tipo_documento').val(data.tipo_documento).prop('disabled', true);
+        mostrarCampos();
+
         $('#ruc').val(data.ruc);
         $('#razon_social').val(data.razon_social);
+        $('#dni_cliente').val(data.dni_cliente);
+        $('#nombre_cliente').val(data.nombre_cliente);
+        $('#apellido_paterno_cliente').val(data.apellido_paterno_cliente);
+        $('#apellido_materno_cliente').val(data.apellido_materno_cliente);
+
         $('#ciudad').val(data.ciudad);
         $('#departamento_codigo').val(data.departamento_codigo).trigger('change');
 
@@ -137,6 +199,7 @@
     function editarCliente() {
         datosClienteOriginales = obtenerValoresCliente();
         $('#form-datos-cliente :input').prop('disabled', false);
+        $('#tipo_documento').prop('disabled', true);
         window.dispatchEvent(new Event('enable-ubigeo'));
         $('#btn-editar-cliente').addClass('d-none');
         $('#btn-guardar-cliente, #btn-cancelar-cliente').removeClass('d-none');
@@ -153,11 +216,42 @@
     function guardarCliente() {
         const data = obtenerValoresCliente();
         const cliente_id = $('#cliente_id').val();
+        const tipo = data.tipo_documento;
 
-        // Validación simple
-        if (!data.ruc || !data.razon_social || !data.ciudad || !data.departamento_codigo || !data.provincia_codigo || !data.distrito_codigo) {
-            alert('Por favor, complete todos los campos obligatorios.');
+        // Validación
+        if (!tipo) {
+            alert('Por favor, seleccione el tipo de documento (DNI o RUC).');
             return;
+        }
+
+        if (tipo === 'ruc') {
+            if (
+                !data.ruc ||
+                !data.razon_social ||
+                !data.ciudad ||
+                !data.departamento_codigo ||
+                !data.provincia_codigo ||
+                !data.distrito_codigo
+            ) {
+                alert('Por favor, complete todos los campos obligatorios para RUC.');
+                return;
+            }
+        }
+
+        if (tipo === 'dni') {
+            if (
+                !data.dni_cliente ||
+                !data.nombre_cliente ||
+                !data.apellido_paterno_cliente ||
+                !data.apellido_materno_cliente ||
+                !data.ciudad ||
+                !data.departamento_codigo ||
+                !data.provincia_codigo ||
+                !data.distrito_codigo
+            ) {
+                alert('Por favor, complete todos los campos obligatorios para DNI.');
+                return;
+            }
         }
 
         $.ajaxSetup({
@@ -170,7 +264,7 @@
             url: `/cliente-gestion/${cliente_id}`,
             method: 'PUT',
             data: {
-                view: 'update-datos-cliente',
+                view: 'update-cliente',
                 ...data
             },
             success: function () {
@@ -254,4 +348,27 @@
             }
         };
     }
+
+    function mostrarCampos() {
+        const tipo = document.getElementById('tipo_documento').value;
+        const camposRuc = document.getElementById('campos-ruc');
+        const camposDni = document.getElementById('campos-dni');
+
+        if (tipo === 'ruc') {
+            camposRuc.style.display = 'flex';
+            camposDni.style.display = 'none';
+        } else if (tipo === 'dni') {
+            camposRuc.style.display = 'none';
+            camposDni.style.display = 'flex';
+        } else {
+            camposRuc.style.display = 'none';
+            camposDni.style.display = 'none';
+        }
+    }
+    $(document).ready(function () {
+        if (!$('#tipo_documento').val()) {
+            $('#tipo_documento').prop('disabled', false);
+        }
+        mostrarCampos();
+    });
 </script>

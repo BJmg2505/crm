@@ -110,8 +110,13 @@
             data: {
                 // cliente
                 view: 'store',
+                tipo_documento: $('#tipo_documento').val(),
                 ruc: $('#ruc').val(),
                 razon_social: $('#razon_social').val(),
+                dni_cliente: $('#dni_cliente').val(),
+                nombre_cliente: $('#nombre_cliente').val(),
+                apellido_paterno_cliente: $('#apellido_paterno_cliente').val(),
+                apellido_materno_cliente: $('#apellido_materno_cliente').val(),
                 ciudad: $('#ciudad').val(),
                 departamento_codigo: $('#departamento_codigo').val(),
                 provincia_codigo: $('#provincia_codigo').val(),

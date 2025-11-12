@@ -10,8 +10,9 @@
                         </div>
                     </th>
                 @endcan
-                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">RUC</th>
-                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Razón Social</th>
+                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Tipo</th>
+                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Identificación</th>
+                <th class="text-center text-uppercase text-secondary text-xs font-weight-bolder opacity-7">Razón Social/Nombre</th>
 
                 @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'jefe comercial',
                     'supervisor', 'capacitador', 'planificacion'])
@@ -58,12 +59,29 @@
                             </div>
                         </td>
                     @endcan
-                    <td class="align-middle text-center">
-                        <h6 class="mb-0 text-xs hover:cursor-pointer" onclick="detalleCliente({{ $value->id }})">
-                            {{ $value->ruc }}</h6>
+                    <td class="align-middle text-center uppercase">
+                        {{ $value->tipo_documento }}
                     </td>
                     <td class="align-middle text-center">
-                        <p class="text-xs font-weight-bold mb-0 uppercase">{{ substr($value->razon_social, 0, 30) }}</p>
+                        <h6 class="mb-0 text-xs hover:cursor-pointer" onclick="detalleCliente({{ $value->id }})">
+                            @if ($value->tipo_documento === 'ruc')
+                                {{ $value->ruc }}
+                            @else
+                                {{ $value->dni_cliente }}
+                            @endif
+                        </h6>
+                    </td>
+                    <td class="align-middle text-center">
+                        <p class="text-xs font-weight-bold mb-0 uppercase">
+                            @if ($value->tipo_documento === 'ruc')
+                                {{ substr($value->razon_social, 0, 30) }}
+                            @else
+                                @php
+                                    $nombre_completo = $value->nombre_cliente.', '.$value->apellido_paterno_cliente.' '.$value->apellido_materno_cliente;
+                                @endphp
+                                {{ substr($nombre_completo, 0, 30) }}
+                            @endif
+                        </p>
                     </td>
 
                     @role(['sistema', 'gerente general', 'gerente comercial', 'asistente comercial', 'jefe comercial',
