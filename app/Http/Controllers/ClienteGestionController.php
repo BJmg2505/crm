@@ -423,10 +423,6 @@ class ClienteGestionController extends Controller
                 array_merge(
                     [
                         'tipo_documento' => 'required|in:dni,ruc',
-                        'ciudad' => 'required|bail',
-                        'departamento_codigo' => 'required',
-                        'provincia_codigo' => 'required',
-                        'distrito_codigo' => 'required',
                     ],
                     $request->tipo_documento === 'ruc'
                         ? [
@@ -469,11 +465,6 @@ class ClienteGestionController extends Controller
                     'nombre_cliente.required' => 'El "Nombre" es obligatorio.',
                     'apellido_paterno_cliente.required' => 'El "Apellido Paterno" es obligatorio.',
                     'apellido_materno_cliente.required' => 'El "Apellido Materno" es obligatorio.',
-
-                    'ciudad.required' => 'La "Ciudad" es obligatoria.',
-                    'departamento_codigo.required' => 'El "Departamento" es obligatorio.',
-                    'provincia_codigo.required' => 'La "Provincia" es obligatoria.',
-                    'distrito_codigo.required' => 'El "Distrito" es obligatorio.',
                 ]
             );
             $cliente->tipo_documento = request('tipo_documento');
@@ -483,7 +474,9 @@ class ClienteGestionController extends Controller
             $cliente->nombre_cliente = request('nombre_cliente');
             $cliente->apellido_paterno_cliente = request('apellido_paterno_cliente');
             $cliente->apellido_materno_cliente = request('apellido_materno_cliente');
-            $cliente->ciudad = request('ciudad');
+            $cliente->correo_cliente = request('correo_cliente');
+            $cliente->celular_cliente = request('celular_cliente');
+            $cliente->ciudad = request('ciudad') ?? '';
             $cliente->departamento_codigo = request('departamento_codigo');
             $cliente->provincia_codigo = request('provincia_codigo');
             $cliente->distrito_codigo = request('distrito_codigo');
@@ -629,25 +622,28 @@ class ClienteGestionController extends Controller
 
             return response()->json($comentarios);
         } elseif ($view === 'update-movistar') {
-            $request->validate(
-                [
-                    'linea_entel' => 'required|bail',
-                    'linea_bitel' => 'required|bail',
-                    'clientetipo_id' => 'required|bail',
-                    'agencia_id' => 'required|bail',
-                ],
-                [
-                    'linea_entel.required' => 'La "Cantidad de trabajadores" es obligatorio.',
-                    'linea_bitel.required' => 'La "Cantidad de sucursales" es obligatorio.',
-                    'clientetipo_id.required' => 'El "Tipo de Cliente" es obligatorio.',
-                    'agencia_id.required' => 'El "Estado cliente" es obligatorio.',
-                ]
-            );
+            // $request->validate(
+            //     [
+            //         'linea_entel' => 'required|bail',
+            //         'linea_bitel' => 'required|bail',
+            //         'clientetipo_id' => 'required|bail',
+            //         'agencia_id' => 'required|bail',
+            //     ],
+            //     [
+            //         'linea_entel.required' => 'La "Cantidad de trabajadores" es obligatorio.',
+            //         'linea_bitel.required' => 'La "Cantidad de sucursales" es obligatorio.',
+            //         'clientetipo_id.required' => 'El "Tipo de Cliente" es obligatorio.',
+            //         'agencia_id.required' => 'El "Estado cliente" es obligatorio.',
+            //     ]
+            // );
             $movistar = new Movistar;
-            $movistar->linea_claro = request('linea_claro');
-            $movistar->linea_entel = request('linea_entel');
-            $movistar->linea_bitel = request('linea_bitel');
-            $movistar->linea_movistar = request('linea_movistar');
+            $movistar->linea_claro = request('linea_claro') ?? 0;
+            $movistar->linea_entel = request('linea_entel') ?? 0;
+            $movistar->linea_bitel = request('linea_bitel') ?? 0;
+            $movistar->linea_movistar = request('linea_movistar') ?? 0;
+            $movistar->cantidad_lineas = request('cantidad_lineas') ?? 0;
+            $movistar->cargo_fijo = request('cargo_fijo') ?? 0;
+            $movistar->score = request('score') ?? 0;
             $movistar->estadowick_id = request('estadowick_id') ?? null;
             $movistar->estadodito_id = request('estadodito_id') ?? 1;
             $movistar->clientetipo_id = request('clientetipo_id') ?? 1;

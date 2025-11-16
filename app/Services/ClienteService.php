@@ -309,6 +309,8 @@ class ClienteService
         $cliente->nombre_cliente = request('nombre_cliente');
         $cliente->apellido_paterno_cliente = request('apellido_paterno_cliente');
         $cliente->apellido_materno_cliente = request('apellido_materno_cliente');
+        $cliente->correo_cliente = request('correo_cliente');
+        $cliente->celular_cliente = request('celular_cliente');
         $cliente->tipo_documento = request('tipo_documento');
         $cliente->ciudad = request('ciudad') ?? '';
         $cliente->fecha_gestion = now();
@@ -367,6 +369,7 @@ class ClienteService
         $movistar->linea_movistar = request('linea_movistar') ?? 0;
         $movistar->cantidad_lineas = request('cantidad_lineas') ?? 0;
         $movistar->cargo_fijo = request('cargo_fijo') ?? 0;
+        $movistar->score = request('score') ?? 0;
         $movistar->estadowick_id = request('estadowick_id') ?? null;
         $movistar->estadodito_id = request('estadodito_id') ?? 1;
         $movistar->clientetipo_id = request('clientetipo_id') ?? 1;

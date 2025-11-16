@@ -67,6 +67,28 @@
                 step="1"
                 value="{{ $movistar->cargo_fijo ?? '' }}">
         </div>
+        <div class="col-md-4 mb-3">
+            <label for="score">Score</label>
+            <input class="form-control"
+                type="number"
+                id="score"
+                name="score"
+                min="0"
+                step="1"
+                value="{{ $movistar->score ?? '' }}">
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="estadodito_id">Tipo</label>
+            <select class="form-control" id="estadodito_id">
+                <option value="">Seleccione...</option>
+                @foreach ($estadoditos as $value)
+                    <option value="{{ $value->id }}"
+                        {{ $movistar && $movistar->estadodito_id == $value->id ? 'selected' : 1 }}>
+                        {{ $value->nombre }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
         @if ($config['datosAdicionales']['estadoWick'])
             <div class="col-md-4 mb-3">
                 <label for="estadowick_id">Tipo</label>
@@ -99,24 +121,25 @@
     }
     function obtenerValoresFormulario() {
         return {
-            estadowick_id: $('#estadowick_id').val() ?? 1,
+            linea_claro: $('#linea_claro').val() ?? 0,
+            linea_movistar: $('#linea_movistar').val() ?? 0,
+            linea_bitel: $('#linea_bitel').val() ?? 0,
+            cantidad_lineas: $('#cantidad_lineas').val() ?? 0,
+            cargo_fijo: $('#cargo_fijo').val() ?? 0,
+            score: $('#score').val() ?? 0,
             estadodito_id: $('#estadodito_id').val() ?? 1,
-            linea_claro: $('#linea_claro').val() ?? '0',
-            linea_entel: $('#linea_entel').val() ?? '0',
-            linea_bitel: $('#linea_bitel').val() ?? '0',
-            linea_movistar: $('#linea_movistar').val() ?? '0',
-            clientetipo_id: $('#clientetipo_id').val() ?? 1,
-            ejecutivo_salesforce: $('#ejecutivo_salesforce').val() ?? '',
-            agencia_id: $('#agencia_id').val() ?? 1,
+            estadowick_id: $('#estadowick_id').val() ?? 1,
         };
     }
     function establecerValoresFormulario(data) {
-        $('#estadowick_id').val(data.estadowick_id);
         $('#linea_claro').val(data.linea_claro);
-        $('#linea_entel').val(data.linea_entel);
+        $('#linea_movistar').val(data.linea_movistar);
         $('#linea_bitel').val(data.linea_bitel);
-        $('#clientetipo_id').val(data.clientetipo_id);
-        $('#ejecutivo_salesforce').val(data.ejecutivo_salesforce);
+        $('#cantidad_lineas').val(data.cantidad_lineas);
+        $('#cargo_fijo').val(data.cargo_fijo);
+        $('#score').val(data.score);
+        $('#estadodito_id').val(data.estadodito_id);
+        $('#estadowick_id').val(data.estadowick_id);
     }
     function guardarDatosAdicionales() {
         const data = obtenerValoresFormulario();

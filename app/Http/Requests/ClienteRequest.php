@@ -23,16 +23,13 @@ class ClienteRequest extends FormRequest
     {
         $rules = [
             'tipo_documento' => 'required|in:dni,ruc',
-            'departamento_codigo' => 'required',
-            'provincia_codigo' => 'required',
-            'distrito_codigo' => 'required',
             'comentario' => 'required|bail',
             'etapa_id' => 'required|bail',
             'estadodito_id' => 'required|bail',
         ];
 
         if ($this->input('tipo_documento') === 'ruc') {
-            $rules['ruc'] = 'required|numeric|digits:11|starts_with:20,10|unique:clientes,ruc';
+            $rules['ruc'] = 'required|numeric|digits:11|starts_with:10|unique:clientes,ruc';
             $rules['razon_social'] = 'required|string';
         }
 
@@ -58,7 +55,7 @@ class ClienteRequest extends FormRequest
             'ruc.required' => 'El "Ruc" es obligatorio.',
             'ruc.numeric' => 'El "Ruc" debe ser numérico.',
             'ruc.digits' => 'El "Ruc" debe tener exactamente 11 dígitos.',
-            'ruc.starts_with' => 'El "Ruc" debe iniciar con 20 o 10.',
+            'ruc.starts_with' => 'El "Ruc" debe iniciar con 10.',
             'ruc.unique' => 'El "Ruc" ya se encuentra registrado.',
             'razon_social.required' => 'La "Razón Social" es obligatorio.',
 
@@ -70,9 +67,6 @@ class ClienteRequest extends FormRequest
             'apellido_paterno_cliente.required' => 'El "Apellido Paterno" es obligatorio.',
             'apellido_materno_cliente.required' => 'El "Apellido Materno" es obligatorio.',
 
-            'departamento_codigo.required' => 'El "Departamento" es obligatorio.',
-            'provincia_codigo.required' => 'La "Provincia" es obligatoria.',
-            'distrito_codigo.required' => 'El "Distrito" es obligatorio.',
             'comentario.required' => 'El "Comentario" es obligatorio.',
             'etapa_id.required' => 'La "Etapa" es obligatorio.',
             'estadodito_id.required' => 'El "Estado Dito" es obligatorio.',

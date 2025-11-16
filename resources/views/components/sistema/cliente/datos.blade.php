@@ -90,84 +90,44 @@
             </div>
         </div>
 
-        <div class="col-12 row g-3">
-            <div class="col-md-8">
-                <input type="text"
-                    id="correo_cliente"
-                    name="correo_cliente"
-                    class="form-control"
-                    placeholder="Correo Electrónico *"
-                    value="{{ $cliente->correo_cliente ?? '' }}"
-                    disabled>
+        <div x-data="telefonoManager({{ $cliente->celular_cliente ?? '[]' }})">
+            <div class="col-12 row g-3">
+                <div class="col-md-8">
+                    <input type="text"
+                        id="correo_cliente"
+                        name="correo_cliente"
+                        class="form-control"
+                        placeholder="Correo Electrónico *"
+                        value="{{ $cliente->correo_cliente ?? '' }}"
+                        disabled>
+                </div>
+                <div class="col-md-3">
+                    <input type="text"
+                        maxlength="9"
+                        x-model="nuevo"
+                        class="form-control"
+                        placeholder="Celular *">
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-warning" @click="agregar">+</button>
+                </div>
             </div>
-            <div class="col-md-3">
-                <input type="text"
-                    maxlength="9"
-                    id="nuevo_celular"
-                    class="form-control"
-                    placeholder="Celular *">
-            </div>
-            <div class="col-md-1">
-                <button type="button" class="btn btn-warning" id="btn-add-celular-cliente">+</button>
-            </div>
-        </div>
-
-        <div class="col-12 row g-3" id="celular_cliente">
-            @isset($cliente->celular_cliente)
-                @foreach (json_decode($cliente->celular_cliente) as $value)
-                    <div class="col-md-3 celular-item">
-                        <input type="text"
-                            name="celular_cliente[]"
-                            maxlength="9"
-                            class="form-control"
-                            value="{{ $value }}"
-                            readonly>
+            <div class="col-12 row g-3 mt-3">
+                <template x-for="(cel, index) in celulares" :key="index">
+                    <div class="col-12 row g-2 celular-item">
+                        <div class="col-md-3">
+                            <input type="text"
+                                class="form-control"
+                                x-model="celulares[index]"
+                                readonly>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-danger" @click="eliminar(index)">x</button>
+                        </div>
                     </div>
-                    <div class="col-md-1 celular-item">
-                        <button type="button" class="btn btn-danger btn-remove-celular-cliente">x</button>
-                    </div>
-                @endforeach
-            @endisset
-        </div>
-
-        {{-- Departamento, Provincia y Distrito --}}
-        <div x-data="ubigeoSelects(
-                '{{ $cliente->departamento_codigo ?? '' }}',
-                '{{ $cliente->provincia_codigo ?? '' }}',
-                '{{ $cliente->distrito_codigo ?? '' }}',
-                true
-            )"
-            x-init="init()"
-            class="col-12 row g-3">
-
-            <div class="col-md-4">
-                <select id="departamento_codigo" x-model="departamento_codigo" @change="fetchProvincias"
-                    :disabled="isReadOnly" class="form-control">
-                    <option value="">Departamento *</option>
-                    @foreach ($departamentos as $item)
-                        <option value="{{ $item->codigo }}">{{ $item->nombre }}</option>
-                    @endforeach
-                </select>
+                </template>
             </div>
-
-            <div class="col-md-4">
-                <select id="provincia_codigo" x-model="provincia_codigo" @change="fetchDistritos"
-                    :disabled="isReadOnly" class="form-control">
-                    <option value="">Provincia *</option>
-                    <template x-for="prov in provincias" :key="prov.codigo">
-                        <option :value="prov.codigo" x-text="prov.nombre"></option>
-                    </template>
-                </select>
-            </div>
-
-            <div class="col-md-4">
-                <select id="distrito_codigo" x-model="distrito_codigo" :disabled="isReadOnly" class="form-control">
-                    <option value="">Distrito *</option>
-                    <template x-for="dist in distritos" :key="dist.codigo">
-                        <option :value="dist.codigo" x-text="dist.nombre"></option>
-                    </template>
-                </select>
-            </div>
+            <input type="hidden" id="celular_cliente" name="celular_cliente" :value="JSON.stringify(celulares)">
         </div>
 
         {{-- Bot opcional --}}
@@ -197,10 +157,8 @@
             nombre_cliente: $('#nombre_cliente').val(),
             apellido_paterno_cliente: $('#apellido_paterno_cliente').val(),
             apellido_materno_cliente: $('#apellido_materno_cliente').val(),
-            
-            departamento_codigo: $('#departamento_codigo').val(),
-            provincia_codigo: $('#provincia_codigo').val(),
-            distrito_codigo: $('#distrito_codigo').val(),
+            correo_cliente: $('#correo_cliente').val(),
+            celular_cliente: $('#celular_cliente').val(),
         };
     }
 
@@ -214,15 +172,8 @@
         $('#nombre_cliente').val(data.nombre_cliente);
         $('#apellido_paterno_cliente').val(data.apellido_paterno_cliente);
         $('#apellido_materno_cliente').val(data.apellido_materno_cliente);
+        $('#correo_cliente').val(data.correo_cliente);
         $('#celular_cliente').val(data.celular_cliente);
-        $('#departamento_codigo').val(data.departamento_codigo).trigger('change');
-
-        setTimeout(() => {
-            $('#provincia_codigo').val(data.provincia_codigo).trigger('change');
-            setTimeout(() => {
-                $('#distrito_codigo').val(data.distrito_codigo);
-            }, 300);
-        }, 300);
     }
 
     function editarCliente() {
@@ -256,11 +207,7 @@
         if (tipo === 'ruc') {
             if (
                 !data.ruc ||
-                !data.razon_social ||
-                !data.ciudad ||
-                !data.departamento_codigo ||
-                !data.provincia_codigo ||
-                !data.distrito_codigo
+                !data.razon_social
             ) {
                 alert('Por favor, complete todos los campos obligatorios para RUC.');
                 return;
@@ -272,11 +219,7 @@
                 !data.dni_cliente ||
                 !data.nombre_cliente ||
                 !data.apellido_paterno_cliente ||
-                !data.apellido_materno_cliente ||
-                !data.ciudad ||
-                !data.departamento_codigo ||
-                !data.provincia_codigo ||
-                !data.distrito_codigo
+                !data.apellido_materno_cliente
             ) {
                 alert('Por favor, complete todos los campos obligatorios para DNI.');
                 return;
@@ -401,54 +344,21 @@
         mostrarCampos();
     });
 
-    // Celulares de cliente
-    document.addEventListener('DOMContentLoaded', function () {
-        const addBtn = document.getElementById('btn-add-celular-cliente');
-        const nuevoCelular = document.getElementById('nuevo_celular');
-        const listaCelulares = document.getElementById('celular_cliente');
-
-        // Agregar nuevo celular
-        addBtn.addEventListener('click', function () {
-            console.log('agregar celular');
-            
-            const numero = nuevoCelular.value.trim();
-
-            // Validar número
-            if (numero === '' || numero.length < 9 || isNaN(numero)) {
-                alert('Ingrese un número de celular válido de 9 dígitos.');
-                return;
-            }
-
-            // Crear elementos HTML dinámicamente
-            const divInput = document.createElement('div');
-            divInput.classList.add('col-md-3', 'celular-item');
-            divInput.innerHTML = `<input type="text" name="celular_cliente[]" maxlength="9" class="form-control" value="${numero}" readonly>`;
-
-            const divBtn = document.createElement('div');
-            divBtn.classList.add('col-md-1', 'celular-item');
-            divBtn.innerHTML = `<button type="button" class="btn btn-danger btn-remove-celular-cliente">x</button>`;
-
-            listaCelulares.appendChild(divInput);
-            listaCelulares.appendChild(divBtn);
-
-            // Limpiar input
-            nuevoCelular.value = '';
-        });
-
-        // Eliminar celular
-        listaCelulares.addEventListener('click', function (e) {
-            if (e.target.classList.contains('btn-remove-celular-cliente')) {
-                const btn = e.target;
-                const item = btn.closest('.celular-item');
-                
-                // Eliminar el botón y el input asociados
-                const prevInput = item.previousElementSibling;
-                if (prevInput && prevInput.classList.contains('celular-item')) {
-                    prevInput.remove();
+    function telefonoManager(celularesIniciales) {
+        return {
+            nuevo: "",
+            celulares: celularesIniciales || [],
+            agregar() {
+                if (this.nuevo.length === 9 && /^[0-9]+$/.test(this.nuevo)) {
+                    this.celulares.push(this.nuevo);
+                    this.nuevo = "";
+                } else {
+                    alert("Debe ingresar un número de 9 dígitos");
                 }
-                item.remove();
+            },
+            eliminar(index) {
+                this.celulares.splice(index, 1);
             }
-        });
-console.log(listaCelulares);
-    });
+        }
+    }
 </script>
