@@ -119,11 +119,11 @@ class Nav extends Component
         // Determinar el saludo según la hora del día
         $hora = now()->format('H');
         if ($hora < 12) {
-            $saludo = '¡Buenos días, ' . $user->name . '! Bienvenido/a Movistar Residencial';
+            $saludo = '¡Buenos días, ' . $user->name . '! Bienvenido/a CRM Residencial';
         } elseif ($hora < 18) {
-            $saludo = '¡Buenas tardes, ' . $user->name . '! Bienvenido/a Movistar Residencial';
+            $saludo = '¡Buenas tardes, ' . $user->name . '! Bienvenido/a CRM Residencial';
         } else {
-            $saludo = '¡Buenas noches, ' . $user->name . '! Bienvenido/a Movistar Residencial';
+            $saludo = '¡Buenas noches, ' . $user->name . '! Bienvenido/a CRM Residencial';
         }
 
         return view('livewire.nav', compact(
