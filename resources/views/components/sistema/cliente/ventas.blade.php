@@ -23,7 +23,6 @@
                     <tr class="text-center align-middle">
                         <th class="text-uppercase fw-bold small" style="color: #ff5100;">Producto</th>
                         <th class="text-uppercase fw-bold small" style="color: #ff5100;">Detalle</th>
-                        <th class="text-uppercase fw-bold small" style="color: #ff5100;">Sucursal</th>
                         <th class="text-uppercase fw-bold small" style="color: #ff5100;">Cant</th>
                         <th class="text-uppercase fw-bold small" style="color: #ff5100;">Precio</th>
                         <th class="text-uppercase fw-bold small" style="color: #ff5100;">Cargo Fijo</th>
@@ -99,9 +98,6 @@
                         </select>
                     </td>
                     <td>
-                        <select class="form-control" id="sucursal_id${num}"></select>
-                    </td>
-                    <td>
                         <input class="form-control form-control-sm" type="number" value="1" id="cantidad${num}" onkeyup="cargoFijoProducto(${num})" style="width: 80px;">
                     </td>
                     <td>
@@ -159,7 +155,6 @@
     function toggleEditMode(num, isEditing) {
         // Habilitar/deshabilitar campos según el modo
         $(`#detalle${num}`).prop('disabled', !isEditing);
-        $(`#sucursal_id${num}`).prop('disabled', !isEditing);
         $(`#cantidad${num}`).prop('disabled', !isEditing);
         $(`#precio${num}`).prop('disabled', !isEditing);
 
@@ -178,10 +173,6 @@
     }
 
     function guardarProducto(num) {
-        if (!$('#sucursal_id' + num).val()) {
-            alert('Debe seleccionar una sucursal');
-            return;
-        }
         const producto = {
             num: num,
             producto_id: $('#producto_id' + num).val(),
@@ -190,8 +181,8 @@
             cantidad: $('#cantidad' + num).val(),
             precio: $('#precio' + num).val(),
             total: $('#cargofijo' + num).val(),
-            sucursal_id: $('#sucursal_id' + num).val(),
-            sucursal_nombre: $('#sucursal_id' + num + ' option:selected').text()
+            sucursal_id: 0,
+            sucursal_nombre: ''
         };
 
         if (!producto.producto_id || producto.producto_id == 0) {
@@ -268,9 +259,6 @@
                         <option value="600 Mbps" ${producto.detalle === '600 Mbps' ? 'selected' : ''}>600 Mbps</option>
                         <option value="1000 Mbps" ${producto.detalle === '1000 Mbps' ? 'selected' : ''}>1000 Mbps</option>
                     </select>
-                </td>
-                <td>
-                    <select class="form-control" id="sucursal_id${producto.num}" disabled></select>
                 </td>
                 <td>
                     <input class="form-control" type="number" value="${producto.cantidad}" id="cantidad${producto.num}" onkeyup="cargoFijoProducto(${producto.num})" disabled style="width: 80px;">
